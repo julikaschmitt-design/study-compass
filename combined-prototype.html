@@ -2,32 +2,35 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Study Compass Köln – Kombinierter Prototyp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Study Compass Köln – Polierter Prototyp</title>
   <style>
     :root {
-      --bg: #f3f5fa;
+      --bg: #f3f5fb;
+      --bg-2: #eef3ff;
       --card: #ffffff;
-      --ink: #172033;
-      --muted: #5b6983;
-      --line: #dfe4ee;
+      --ink: #151d2d;
+      --muted: #5f6f87;
+      --line: #dfe6f2;
       --primary: #2e5bd7;
-      --primary-soft: #eaf0ff;
+      --primary-2: #4f7cff;
+      --primary-soft: #edf3ff;
       --success: #1a8a60;
-      --warning: #b87400;
-      --danger: #c85642;
-      --shadow: 0 10px 30px rgba(18, 29, 52, 0.08);
-      --land: #f6f1ea;
-      --water: #bfdaf7;
-      --park: #dfeaee;
-      --chip: #edf1f8;
-      --nav: rgba(255,255,255,0.9);
+      --warning: #c98a1b;
+      --danger: #cf5847;
+      --shadow: 0 18px 38px rgba(20, 31, 62, 0.08);
+      --land: #f7f3ee;
+      --water: #c6defb;
+      --park: #dfece3;
+      --glass: rgba(255, 255, 255, 0.65);
+      --chip: #edf2fa;
+      --nav-bg: rgba(255,255,255,0.9);
     }
 
     * { box-sizing: border-box; }
     html, body {
       margin: 0;
-      background: var(--bg);
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       color: var(--ink);
       font-family: Inter, "Segoe UI", sans-serif;
       line-height: 1.4;
@@ -37,7 +40,7 @@
       max-width: 480px;
       margin: 0 auto;
       min-height: 100vh;
-      padding-bottom: 82px;
+      padding-bottom: 90px;
     }
 
     button, input, select {
@@ -48,9 +51,9 @@
       position: sticky;
       top: 0;
       z-index: 20;
-      background: rgba(243,245,250,0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
+      background: rgba(243,245,251,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(223,230,242,0.8);
       padding: 16px 18px 12px;
     }
 
@@ -63,43 +66,46 @@
 
     h1 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: clamp(1.4rem, 2.3vw, 1.75rem);
       letter-spacing: -0.03em;
     }
 
     .badge {
       display: inline-block;
-      vertical-align: middle;
+      align-self: center;
       margin-left: 6px;
-      padding: 3px 7px;
+      font-weight: 800;
+      font-size: 0.64rem;
+      padding: 4px 8px;
       border-radius: 999px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      background: var(--primary-soft);
       color: var(--primary);
+      background: var(--primary-soft);
+      border: 1px solid rgba(46,91,215,0.12);
+      vertical-align: middle;
     }
 
     .sub {
-      margin: 4px 0 0;
-      color: var(--muted);
+      margin: 5px 0 0;
       font-size: 0.76rem;
+      color: var(--muted);
     }
 
     .avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 12px;
       border: 1px solid var(--line);
+      background: linear-gradient(145deg, var(--card), #eef3ff);
       display: grid;
       place-items: center;
-      background: var(--card);
-      font-weight: 800;
       color: var(--primary);
-      flex-shrink: 0;
+      font-weight: 900;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
     }
 
     main {
-      padding: 14px 18px 10px;
+      padding: 18px 18px 8px;
     }
 
     .row {
@@ -108,7 +114,7 @@
       overflow-x: auto;
       scrollbar-width: none;
       padding-bottom: 6px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .row::-webkit-scrollbar { display: none; }
@@ -120,109 +126,115 @@
       color: var(--ink);
       border-radius: 999px;
       padding: 8px 12px;
-      font-weight: 700;
-      font-size: 0.8rem;
+      font-weight: 800;
+      font-size: 0.76rem;
       cursor: pointer;
       transition: 0.15s ease;
+      box-shadow: 0 2px 6px rgba(18,29,52,0.02);
     }
 
     .chip.active {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      border-color: transparent;
       color: white;
-      border-color: var(--primary);
-      box-shadow: var(--shadow);
+      box-shadow: 0 12px 24px rgba(46, 91, 215, 0.24);
     }
 
     .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: 0 2px 10px rgba(16, 25, 39, 0.02);
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(223,230,242,0.9);
+      border-radius: 18px;
+      padding: 15px 14px;
       margin-bottom: 12px;
+      box-shadow: var(--shadow);
     }
 
     .panel h2, .panel h3 {
       margin: 0 0 8px;
-      font-size: 1.04rem;
+      font-size: 1.02rem;
+      letter-spacing: -0.02em;
     }
 
     label {
       display: block;
-      margin: 8px 0 4px;
-      font-size: 0.76rem;
-      font-weight: 700;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
       color: var(--muted);
     }
 
     input, select {
       width: 100%;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--line);
       background: var(--bg);
       color: var(--ink);
-      padding: 9px 10px;
+      padding: 10px 12px;
       outline: none;
+      transition: 0.15s ease;
     }
 
     input:focus, select:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(46,91,215,0.1);
+      box-shadow: 0 0 0 3px rgba(46,91,215,0.08);
     }
 
     .filters {
       display: flex;
       flex-wrap: wrap;
       gap: 7px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .filter {
       border: 1px solid var(--line);
       background: transparent;
-      border-radius: 8px;
-      padding: 6px 10px;
-      cursor: pointer;
-      font-size: 0.75rem;
-      font-weight: 700;
       color: var(--ink);
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .filter.active {
       background: var(--primary-soft);
-      border-color: var(--primary);
+      border-color: rgba(46,91,215,0.18);
       color: var(--primary);
     }
 
     .segmented {
       display: flex;
+      gap: 5px;
       margin: 8px 0 12px;
-      background: var(--card);
+      padding: 5px;
+      background: rgba(237,243,255,0.7);
       border: 1px solid var(--line);
-      border-radius: 10px;
-      overflow: hidden;
+      border-radius: 12px;
     }
 
     .segmented button {
       flex: 1;
       border: 0;
       background: transparent;
-      padding: 9px 8px;
-      font-weight: 700;
       color: var(--muted);
+      padding: 9px 10px;
+      border-radius: 9px;
+      font-weight: 800;
       cursor: pointer;
     }
 
     .segmented button.active {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
       color: white;
+      box-shadow: 0 8px 18px rgba(46, 91, 215, 0.22);
     }
 
     .map-wrap {
-      margin-top: 8px;
-      background: var(--card);
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.75));
       border: 1px solid var(--line);
-      border-radius: 16px;
+      border-radius: 18px;
       overflow: hidden;
     }
 
@@ -233,29 +245,30 @@
     }
 
     .pin { cursor: pointer; }
-    .pin circle { stroke: var(--card); stroke-width: 2.5; }
+    .pin circle { stroke: rgba(255,255,255,0.9); stroke-width: 2.4; }
     .pin text {
       font-size: 11px;
+      fill: white;
+      font-weight: 800;
       text-anchor: middle;
       dominant-baseline: central;
-      font-weight: 800;
-      fill: white;
       pointer-events: none;
     }
-    .pin.selected circle { stroke: var(--ink); stroke-width: 4; }
+    .pin.selected circle { stroke: var(--ink); stroke-width: 3.5; }
 
     .place-count {
       margin-top: 8px;
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       color: var(--muted);
     }
 
     .place-card {
-      background: var(--card);
+      background: rgba(255,255,255,0.9);
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 18px;
       padding: 14px;
-      margin-bottom: 12px;
+      margin-top: 12px;
+      box-shadow: 0 10px 20px rgba(19,30,52,0.03);
     }
 
     .place-top {
@@ -270,32 +283,32 @@
     }
 
     .place-name {
-      font-size: 1.02rem;
-      font-weight: 800;
       margin: 0;
+      font-size: 1.04rem;
+      letter-spacing: -0.02em;
     }
 
     .place-meta {
       margin-top: 4px;
+      font-size: 0.74rem;
       color: var(--muted);
-      font-size: 0.76rem;
     }
 
     .grade {
       min-width: 52px;
+      border-radius: 10px;
+      padding: 9px 7px 7px;
       background: var(--primary-soft);
       color: var(--primary);
-      border-radius: 10px;
+      font-weight: 900;
       text-align: center;
-      padding: 9px 8px 7px;
-      font-weight: 800;
+      line-height: 1.1;
     }
 
     .grade small {
       display: block;
       font-size: 0.58rem;
       margin-top: 2px;
-      font-weight: 700;
       opacity: 0.75;
     }
 
@@ -303,8 +316,8 @@
       width: 34px;
       height: 34px;
       border: 1px solid var(--line);
+      border-radius: 9px;
       background: transparent;
-      border-radius: 8px;
       color: var(--muted);
       font-size: 1rem;
       cursor: pointer;
@@ -312,7 +325,7 @@
 
     .fav.active {
       color: var(--primary);
-      border-color: var(--primary);
+      border-color: rgba(46,91,215,0.25);
       background: var(--primary-soft);
     }
 
@@ -320,31 +333,30 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .tag {
-      background: var(--chip);
-      color: var(--ink);
-      border-radius: 6px;
       padding: 4px 8px;
-      font-size: 0.69rem;
-      font-weight: 700;
+      border-radius: 7px;
+      background: var(--chip);
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--ink);
     }
 
     .card-footer {
-      margin-top: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
     }
 
     .price {
-      font-size: 0.82rem;
       color: var(--muted);
-      font-weight: 700;
+      font-size: 0.8rem;
+      font-weight: 800;
     }
 
     .crowd {
@@ -352,12 +364,12 @@
       align-items: center;
       gap: 7px;
       font-size: 0.76rem;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .dot {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 3px;
       display: inline-block;
     }
@@ -365,70 +377,69 @@
     .button-row {
       display: flex;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 12px;
       flex-wrap: wrap;
     }
 
     .btn {
+      flex: 1;
+      min-width: 110px;
       border: 1px solid var(--line);
       background: transparent;
       color: var(--ink);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-weight: 700;
       cursor: pointer;
-      flex: 1;
-      min-width: 110px;
+      border-radius: 12px;
+      padding: 9px 12px;
+      font-weight: 800;
     }
 
     .btn.primary {
-      background: var(--primary);
-      border-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      border-color: transparent;
       color: white;
+      box-shadow: 0 12px 24px rgba(46,91,215,0.2);
     }
 
     .btn.secondary {
       background: var(--primary-soft);
+      border-color: rgba(46,91,215,0.12);
       color: var(--primary);
-      border-color: var(--primary-soft);
     }
 
     .meta-text {
+      font-size: 0.74rem;
       color: var(--muted);
-      font-size: 0.76rem;
       margin-top: 4px;
     }
 
     .event-card {
       display: flex;
       gap: 12px;
-      background: var(--card);
+      background: rgba(255,255,255,0.9);
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 12px 14px;
       margin-bottom: 10px;
+      box-shadow: 0 10px 18px rgba(18,29,52,0.03);
     }
 
     .event-time {
       width: 54px;
+      font-size: 0.8rem;
       font-weight: 900;
       color: var(--primary);
-      font-size: 0.8rem;
       padding-top: 2px;
     }
 
-    .event-detail {
-      flex: 1;
-    }
-
     .event-title {
-      font-weight: 800;
+      font-weight: 900;
       margin-bottom: 2px;
     }
 
     .event-location {
+      margin-top: 4px;
+      font-size: 0.72rem;
       color: var(--muted);
-      font-size: 0.75rem;
     }
 
     .stats {
@@ -438,7 +449,7 @@
       text-align: center;
     }
 
-    .stats div {
+    .stats > div {
       background: var(--bg);
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -447,18 +458,21 @@
 
     .stats strong {
       display: block;
-      font-size: 1.2rem;
-      margin-bottom: 3px;
+      font-size: 1.15rem;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
     }
 
     .stats span {
+      display: block;
       color: var(--muted);
-      font-size: 0.66rem;
+      font-size: 0.64rem;
+      font-weight: 700;
     }
 
     .list-block {
       display: grid;
-      gap: 8px;
+      gap: 6px;
     }
 
     .list-row {
@@ -466,7 +480,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      padding: 10px 0;
+      padding: 9px 0;
       border-top: 1px solid var(--line);
     }
 
@@ -474,40 +488,41 @@
 
     .list-row strong {
       display: block;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
     }
 
     .list-row span {
+      display: block;
+      font-size: 0.7rem;
       color: var(--muted);
-      font-size: 0.72rem;
     }
 
     .toggle {
       position: relative;
       width: 42px;
       height: 24px;
-      padding: 0;
       border: 0;
-      border-radius: 999px;
       background: #dfe4ee;
+      border-radius: 999px;
       cursor: pointer;
+      transition: background 0.15s ease;
     }
 
     .toggle::after {
       content: "";
       position: absolute;
-      width: 16px;
-      height: 16px;
-      background: white;
-      border-radius: 50%;
       top: 4px;
       left: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 3px rgba(16,25,39,0.2);
       transition: left 0.15s ease;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
     .toggle.on {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
     }
 
     .toggle.on::after {
@@ -521,9 +536,9 @@
       bottom: 0;
       width: 100%;
       max-width: 480px;
-      background: var(--nav);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid var(--line);
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid rgba(223,230,242,0.9);
       display: flex;
       padding: 6px 8px calc(8px + env(safe-area-inset-bottom, 0px));
       z-index: 30;
@@ -564,11 +579,11 @@
       left: 50%;
       transform: translateX(-50%);
       bottom: 88px;
-      background: rgba(23,32,51,0.94);
+      background: rgba(21,29,45,0.95);
       color: white;
       border-radius: 999px;
       padding: 8px 14px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.18s ease;
@@ -579,7 +594,7 @@
 
     @media (max-width: 360px) {
       body { min-width: 320px; }
-      .button-row .btn { min-width: 100px; }
+      .btn { min-width: 0; }
     }
   </style>
 </head>
@@ -587,8 +602,8 @@
   <header>
     <div class="header-row">
       <div>
-        <h1>Study Compass <span class="badge">Kombi</span></h1>
-        <p class="sub">Alles fürs Studi-Leben in Köln – mit Karte, Budget & Community.</p>
+        <h1>Study Compass <span class="badge">Poliert</span></h1>
+        <p class="sub">Karte, Budget & Community für den Studienalltag in Köln.</p>
       </div>
       <div class="avatar" id="avatar">M</div>
     </div>
@@ -600,7 +615,7 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const STORAGE_KEY = 'study-compass-combined-v1';
+    const STORAGE_KEY = 'study-compass-polished-v1';
 
     const categories = {
       all: 'Alle',
@@ -643,7 +658,7 @@
 
     const events = [
       { id: 1, time: '17:00', title: 'Happy Hour', description: 'Cocktails ab 4 €', area: 'Belgisches Viertel', group: 'Happy Hour' },
-      { id: 2, time: '18:30', title: 'Hofflohmarkt Ehrenfeld', description: 'Over 30 alle mitmachen', area: 'Ehrenfeld', group: 'Hofflohmarkt' },
+      { id: 2, time: '18:30', title: 'Hofflohmarkt Ehrenfeld', description: 'Über 30 Höfe machen mit', area: 'Ehrenfeld', group: 'Hofflohmarkt' },
       { id: 3, time: '19:00', title: 'Straßenfest Südstadt', description: 'Live-Musik und Essensstände', area: 'Südstadt', group: 'Straßenfest' },
       { id: 4, time: '20:00', title: 'Open Mic', description: 'Kleiner Abend mit Musik', area: 'Zülpicher Viertel', group: 'Kleines Event' },
       { id: 5, time: '21:30', title: 'Kölsch-Special', description: '0,3 l für 1,80 €', area: 'Altstadt', group: 'Hot Tipp' }
@@ -667,23 +682,22 @@
       eventFilter: 'all',
       favorites: [],
       user: 'Max',
-      dark: false,
       notifications: { updates: true, events: true },
       budgetItems: [
         { id: 1, name: 'BAföG / Job', type: 'income', value: 900 },
         { id: 2, name: 'Miete & Nebenkosten', type: 'expense', value: 380 },
         { id: 3, name: 'Essen & Trinken', type: 'expense', value: 180 },
-        { id: 4, name: 'Freizeit', type: 'expense', value: 90 }
+        { id: 4, name: 'Freizeit', type: 'expense', value: 80 }
       ],
-      savingsGoal: 150
+      savingsGoal: 150,
+      dark: false
     };
 
     const state = loadState();
 
     function loadState() {
       try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-        return { ...defaultState, ...saved };
+        return { ...defaultState, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') };
       } catch (err) {
         return { ...defaultState };
       }
@@ -705,14 +719,14 @@
       return Number(v || 0).toFixed(2).replace('.', ',') + ' €';
     }
 
-    function formatShort(v) {
+    function short(v) {
       return Number(v || 0).toFixed(1).replace('.', ',');
     }
 
-    function crowdColor(v) {
+    function crowdFromValue(v) {
       if (v < 35) return ['Ruhig', '#1a8a60'];
-      if (v < 70) return ['Mittel', '#b87400'];
-      return ['Voll', '#c85642'];
+      if (v < 70) return ['Mittel', '#c98a1b'];
+      return ['Voll', '#cf5847'];
     }
 
     function filterPlaces() {
@@ -720,17 +734,16 @@
 
       return places.filter((p) => {
         if (state.cat !== 'all' && p.c !== state.cat) return false;
-        if (p.p > budgetLimit && state.budgetMax !== '') return false;
+        if (state.budgetMax !== '' && p.p > budgetLimit) return false;
         if (state.filters.includes('ruhig') && p.cr >= 35) return false;
-        if (state.filters.includes('budget') && p.p > budgetLimit && budgetLimit !== Infinity) return false;
 
-        return state.filters.every((flag) => {
-          if (flag === 'vegan') return p.t.includes('vegan') || p.t.includes('veg');
-          if (flag === 'gluten') return p.t.includes('gluten');
-          if (flag === 'barrierefrei') return p.t.includes('barrierefrei');
-          if (flag === 'wlan') return p.t.includes('wlan');
-          if (flag === 'ruhig') return p.cr < 35;
-          if (flag === 'budget') return p.p <= budgetLimit || budgetLimit === Infinity;
+        return state.filters.every((key) => {
+          if (key === 'vegan') return p.t.includes('vegan') || p.t.includes('veg');
+          if (key === 'gluten') return p.t.includes('gluten');
+          if (key === 'barrierefrei') return p.t.includes('barrierefrei');
+          if (key === 'wlan') return p.t.includes('wlan');
+          if (key === 'ruhig') return p.cr < 35;
+          if (key === 'budget') return p.p <= budgetLimit || budgetLimit === Infinity;
           return true;
         });
       });
@@ -739,7 +752,7 @@
     function renderNav() {
       const nav = document.getElementById('nav');
       nav.innerHTML = tabs.map(tab => `
-        <button data-action="tab" data-key="${tab.key}" class="${state.tab === tab.key ? 'active' : ''}">
+        <button class="${state.tab === tab.key ? 'active' : ''}" data-action="tab" data-key="${tab.key}">
           ${renderIcon(tab.icon)}
           <span>${tab.label}</span>
         </button>
@@ -759,7 +772,7 @@
 
     function renderDiscover() {
       const filtered = filterPlaces();
-      const selected = places.find(p => p.id === state.selectedPlace) || filtered[0] || places[0];
+      const selected = filtered.find(p => p.id === state.selectedPlace) || filtered[0] || places[0];
 
       const categoryChips = ['all', ...Object.keys(categories).filter(k => k !== 'all')].map(key => `
         <button class="chip ${state.cat === key ? 'active' : ''}" data-action="cat" data-key="${key}">${categories[key]}</button>
@@ -769,8 +782,14 @@
         <button class="filter ${state.filters.includes(key) ? 'active' : ''}" data-action="filter" data-key="${key}">${label}</button>
       `).join('');
 
-      const map = buildMap(filtered, selected);
-      const list = filtered.length ? filtered.map(renderPlaceCard).join('') : '<div class="panel"><strong>Keine Treffer.</strong><div class="meta-text">Erhöhe dein Budget oder schalte einen Filter aus.</div></div>';
+      const mapMarkup = buildMap(filtered, selected);
+      const content = state.view === 'map'
+        ? `
+          <div class="map-wrap">${mapMarkup}</div>
+          <div class="place-count">${filtered.length} ${filtered.length === 1 ? 'Ort' : 'Orte'} gefunden</div>
+          ${selected && filtered.some(p => p.id === selected.id) ? renderPlaceCard(selected, true) : ''}
+        `
+        : filtered.length ? filtered.map(renderPlaceCard).join('') : '<div class="panel"><strong>Keine Treffer.</strong><div class="meta-text">Erhöhe dein Budget oder schalte einen Filter aus.</div></div>';
 
       return `
         <div class="row">${categoryChips}</div>
@@ -781,16 +800,10 @@
           <div class="filters">${filterButtons}</div>
         </div>
         <div class="segmented">
-          <button data-action="view" data-key="map" class="${state.view === 'map' ? 'active' : ''}">Karte</button>
-          <button data-action="view" data-key="list" class="${state.view === 'list' ? 'active' : ''}">Liste</button>
+          <button class="${state.view === 'map' ? 'active' : ''}" data-action="view" data-key="map">Karte</button>
+          <button class="${state.view === 'list' ? 'active' : ''}" data-action="view" data-key="list">Liste</button>
         </div>
-        ${state.view === 'map' ? `
-          <div class="map-wrap">
-            ${map}
-          </div>
-          <div class="place-count">${filtered.length} ${filtered.length === 1 ? 'Ort' : 'Orte'} gefunden</div>
-          ${selected && filtered.some(p => p.id === selected.id) ? renderPlaceCard(selected, true) : ''}
-        ` : list}
+        ${content}
       `;
     }
 
@@ -798,8 +811,8 @@
       const base = `
         <svg class="map" viewBox="0 0 360 400" aria-label="Karte von Köln">
           <rect width="360" height="400" fill="var(--land)"/>
-          <path d="M255 -10 C 285 80, 300 140, 262 215 S 245 330, 262 410" stroke="var(--water)" stroke-width="28" fill="none" stroke-linecap="round"/>
-          <ellipse cx="112" cy="262" rx="34" ry="14" fill="var(--water)"/>
+          <path d="M255 -10 C 285 80, 300 140, 262 215 S 245 330, 262 410" stroke="var(--water)" stroke-width="30" fill="none" stroke-linecap="round"/>
+          <ellipse cx="113" cy="262" rx="34" ry="14" fill="var(--water)"/>
           <ellipse cx="146" cy="132" rx="30" ry="20" fill="var(--park)"/>
           <ellipse cx="318" cy="180" rx="28" ry="38" fill="var(--park)"/>
           <g stroke="rgba(23,32,51,0.18)" stroke-width="7" fill="none" stroke-linecap="round">
@@ -809,9 +822,9 @@
             <path d="M0 190 H240M0 290 H245M130 0 V400M30 0 V400"/>
           </g>
           <text x="230" y="170" font-size="20">⛪</text>
-          <text x="232" y="190" font-size="9" fill="#5b6983">Dom</text>
-          <text x="282" y="60" font-size="10" fill="#5b6983" transform="rotate(75 282 60)">Rhein</text>
-          <text x="28" y="378" font-size="9" fill="#5b6983">Uni</text>
+          <text x="232" y="190" font-size="9" fill="#5f6f87">Dom</text>
+          <text x="282" y="60" font-size="10" fill="#5f6f87" transform="rotate(75 282 60)">Rhein</text>
+          <text x="28" y="378" font-size="9" fill="#5f6f87">Uni</text>
       `;
 
       const markers = filtered.map((p) => {
@@ -830,13 +843,13 @@
 
     function getCatColor(cat) {
       const map = {
-        essen: '#c85642',
+        essen: '#d86650',
         cafe: '#2e5bd7',
-        lernen: '#5a4fc8',
-        sport: '#118a60',
-        rabatt: '#c98b2d',
-        jobs: '#0e7c93',
-        praktisch: '#58657a'
+        lernen: '#6654d6',
+        sport: '#1a9164',
+        rabatt: '#c58b24',
+        jobs: '#0d8292',
+        praktisch: '#59657b'
       };
       return map[cat] || '#2e5bd7';
     }
@@ -854,8 +867,8 @@
       return map[cat] || 'P';
     }
 
-    function renderPlaceCard(place, selected = false) {
-      const crowd = crowdColor(place.cr);
+    function renderPlaceCard(place, isSelected = false) {
+      const crowd = crowdFromValue(place.cr);
       const favorite = state.favorites.includes(place.id);
       return `
         <article class="place-card" data-action="place" data-id="${place.id}">
@@ -864,19 +877,16 @@
               <h3 class="place-name">${place.n}</h3>
               <div class="place-meta">${place.a} · ${place.w || 'Gut erreichbar'}</div>
             </div>
-            <div class="grade">${formatShort(place.g)}<small>Note</small></div>
+            <div class="grade">${short(place.g)}<small>Note</small></div>
             <button class="fav ${favorite ? 'active' : ''}" data-action="favorite" data-id="${place.id}" aria-label="Favorit">♥</button>
           </div>
-
           <div class="tags">
             ${place.t.map(tag => `<span class="tag">${flags[tag] || tag}</span>`).join('')}
           </div>
-
           <div class="card-footer">
-            <span class="price">${place.p === 0 ? 'Gratis' : `${money(place.p)}`}</span>
+            <span class="price">${place.p === 0 ? 'Gratis' : money(place.p)}</span>
             <span class="crowd"><span class="dot" style="background:${crowd[1]}"></span>${crowd[0]}</span>
           </div>
-
           <div class="button-row">
             <button class="btn secondary" data-action="route" data-id="${place.id}">Route</button>
             <button class="btn primary" data-action="review" data-id="${place.id}">Bewerten</button>
@@ -886,9 +896,9 @@
     }
 
     function renderToday() {
-      const eventGroups = ['all', ...new Set(events.map(e => e.group))];
-      const chosen = state.eventFilter || 'all';
-      const visible = chosen === 'all' ? events : events.filter(e => e.group === chosen);
+      const groups = ['all', ...new Set(events.map(e => e.group))];
+      const selected = state.eventFilter || 'all';
+      const visible = selected === 'all' ? events : events.filter(e => e.group === selected);
 
       return `
         <div class="panel">
@@ -896,14 +906,14 @@
           <div class="meta-text">${new Date().toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
         </div>
         <div class="row">
-          ${eventGroups.map(group => `
-            <button class="chip ${chosen === group ? 'active' : ''}" data-action="eventFilter" data-key="${group}">${group === 'all' ? 'Alle' : group}</button>
+          ${groups.map(group => `
+            <button class="chip ${selected === group ? 'active' : ''}" data-action="eventFilter" data-key="${group}">${group === 'all' ? 'Alle' : group}</button>
           `).join('')}
         </div>
         ${visible.map(e => `
           <div class="event-card">
             <div class="event-time">${e.time}</div>
-            <div class="event-detail">
+            <div>
               <div class="event-title">${e.title}</div>
               <div class="meta-text">${e.description}</div>
               <div class="event-location">${e.area}</div>
@@ -923,13 +933,13 @@
 
     function renderBudget() {
       const summary = budgetSummary();
-      const row = item => `
+      const renderItem = item => `
         <div class="list-row">
           <div>
             <strong>${item.name}</strong>
             <span>${item.type === 'income' ? 'Einnahme' : 'Ausgabe'}</span>
           </div>
-          <input data-action="budgetItem" data-id="${item.id}" value="${item.value}" style="max-width:110px;" />
+          <input data-action="budgetItem" data-id="${item.id}" value="${item.value}" style="max-width:120px;" />
         </div>
       `;
 
@@ -937,9 +947,9 @@
         <div class="panel">
           <h2>Monatsbudget</h2>
           <div class="meta-text">Verbleibend pro Tag nach Sparziel</div>
-          <div class="big" style="font-size:2rem;font-weight:900; margin-top:8px; color:${summary.daily >= 0 ? '#1a8a60' : '#c85642'};">${money(Math.max(0, summary.daily))}</div>
-          <div class="bar" style="height:8px;background:#edf1f8;border-radius:999px;overflow:hidden;margin-top:12px;">
-            <div style="height:100%;width:${Math.min(100, Math.max(0, (summary.left / Math.max(summary.income, 1)) * 100))}%;background:${summary.left >= 0 ? '#1a8a60' : '#c85642'};border-radius:999px;"></div>
+          <div style="margin-top:8px; font-size:2rem; font-weight:900; letter-spacing:-0.04em; color:${summary.daily >= 0 ? '#1a8a60' : '#cf5847'};">${money(Math.max(0, summary.daily))}</div>
+          <div style="height:8px; background:#edf2fa; border-radius:999px; overflow:hidden; margin-top:12px;">
+            <div style="height:100%; width:${Math.min(100, Math.max(0, (summary.left / Math.max(summary.income, 1)) * 100))}%; background:${summary.left >= 0 ? '#1a8a60' : '#cf5847'}; border-radius:999px;"></div>
           </div>
           <div class="button-row">
             <button class="btn primary" data-action="applyBudget">Als Filter nutzen</button>
@@ -952,13 +962,13 @@
             <div><strong>${money(summary.income)}</strong><span>Einnahmen</span></div>
             <div><strong>${money(summary.expense)}</strong><span>Ausgaben</span></div>
             <div><strong>${money(summary.left)}</strong><span>Übrig</span></div>
-            <div><strong>${money(summary.savingsGoal || 0)}</strong><span>Sparziel</span></div>
+            <div><strong>${money(Number(state.savingsGoal || 0))}</strong><span>Sparziel</span></div>
           </div>
         </div>
 
         <div class="panel">
           <h3>Einträge</h3>
-          <div class="list-block">${state.budgetItems.map(row).join('')}</div>
+          <div class="list-block">${state.budgetItems.map(renderItem).join('')}</div>
         </div>
       `;
     }
@@ -978,8 +988,20 @@
         <div class="panel">
           <h3>Rabatt-Updates</h3>
           <div class="list-block">
-            <div class="list-row"><div><strong>Kino-Montag erweitert</strong><span>Mit Studi-Ausweis</span></div><button class="toggle on" data-action="toggle" data-key="updates"></button></div>
-            <div class="list-row"><div><strong>Event-Erinnerungen</strong><span>Heute im Viertel</span></div><button class="toggle on" data-action="toggle" data-key="events"></button></div>
+            <div class="list-row">
+              <div>
+                <strong>Kino-Montag erweitert</strong>
+                <span>Mit Studi-Ausweis</span>
+              </div>
+              <button class="toggle ${state.notifications.updates ? 'on' : ''}" data-action="toggle" data-key="updates"></button>
+            </div>
+            <div class="list-row">
+              <div>
+                <strong>Event-Erinnerungen</strong>
+                <span>Heute im Viertel</span>
+              </div>
+              <button class="toggle ${state.notifications.events ? 'on' : ''}" data-action="toggle" data-key="events"></button>
+            </div>
           </div>
         </div>
 
@@ -1003,7 +1025,7 @@
           <div class="place-top" style="align-items:center;">
             <div class="avatar" style="width:44px;height:44px;">${state.user.charAt(0).toUpperCase()}</div>
             <div class="place-main">
-              <div style="font-weight:800;">${state.user}</div>
+              <div style="font-weight:900;">${state.user}</div>
               <div class="meta-text">student@studium.de</div>
             </div>
           </div>
@@ -1014,15 +1036,35 @@
           <div class="list-block">
             ${state.favorites.length ? state.favorites.map(id => {
               const place = places.find(p => p.id === id);
-              return `<div class="list-row"><div><strong>${place.n}</strong><span>${place.a}</span></div><button class="btn" data-action="removeFavorite" data-id="${id}">Entfernen</button></div>`;
+              return `
+                <div class="list-row">
+                  <div>
+                    <strong>${place.n}</strong>
+                    <span>${place.a}</span>
+                  </div>
+                  <button class="btn" data-action="removeFavorite" data-id="${id}">Entfernen</button>
+                </div>
+              `;
             }).join('') : '<div class="meta-text">Noch keine Favoriten gespeichert.</div>'}
           </div>
         </div>
 
         <div class="panel">
           <h3>Einstellungen</h3>
-          <div class="list-row"><div><strong>Farbschema</strong><span>Hell / automatisch</span></div><button class="toggle ${state.dark ? 'on' : ''}" data-action="toggleTheme"></button></div>
-          <div class="list-row"><div><strong>Standardbudget</strong><span>Pro Besuch</span></div><input data-action="defaultBudget" value="${state.budgetMax || ''}" style="max-width:110px;" /></div>
+          <div class="list-row">
+            <div>
+              <strong>Farbschema</strong>
+              <span>Hell / automatisch</span>
+            </div>
+            <button class="toggle ${state.dark ? 'on' : ''}" data-action="toggleTheme"></button>
+          </div>
+          <div class="list-row">
+            <div>
+              <strong>Standardbudget</strong>
+              <span>Pro Besuch</span>
+            </div>
+            <input data-action="defaultBudget" value="${state.budgetMax || ''}" style="max-width:120px;" />
+          </div>
         </div>
       `;
     }
@@ -1035,11 +1077,10 @@
         community: renderCommunity(),
         profile: renderProfile()
       }[state.tab];
-
       document.getElementById('avatar').textContent = state.user.charAt(0).toUpperCase();
     }
 
-    function bindActions() {
+    function bindEvents() {
       document.addEventListener('click', (event) => {
         const trigger = event.target.closest('[data-action]');
         if (!trigger) return;
@@ -1062,8 +1103,8 @@
         }
 
         if (action === 'filter') {
-          const idx = state.filters.indexOf(key);
-          if (idx >= 0) state.filters.splice(idx, 1);
+          const index = state.filters.indexOf(key);
+          if (index >= 0) state.filters.splice(index, 1);
           else state.filters.push(key);
           renderApp();
           saveState();
@@ -1082,22 +1123,22 @@
         }
 
         if (action === 'favorite') {
-          const already = state.favorites.includes(id);
-          if (already) state.favorites = state.favorites.filter(v => v !== id);
+          const exists = state.favorites.includes(id);
+          if (exists) state.favorites = state.favorites.filter(v => v !== id);
           else state.favorites.push(id);
           renderApp();
           saveState();
-          showToast(already ? 'Favorit entfernt' : 'Favorit gespeichert');
+          showToast(exists ? 'Favorit entfernt' : 'Favorit gespeichert');
         }
 
         if (action === 'route') {
           const place = places.find(p => p.id === id);
-          showToast(place ? `Route: ${place.n}` : 'Route geplant');
+          showToast(place ? `Route zu ${place.n}` : 'Route gestartet');
         }
 
         if (action === 'review') {
           const place = places.find(p => p.id === id);
-          showToast(place ? `Bewertung für ${place.n}` : 'Bewertung');
+          showToast(place ? `Bewerten: ${place.n}` : 'Bewerten');
         }
 
         if (action === 'eventFilter') {
@@ -1107,15 +1148,14 @@
         }
 
         if (action === 'toggle') {
-          const toggleKey = key || trigger.dataset.key;
-          if (toggleKey === 'updates') state.notifications.updates = !state.notifications.updates;
-          if (toggleKey === 'events') state.notifications.events = !state.notifications.events;
+          if (key === 'updates') state.notifications.updates = !state.notifications.updates;
+          if (key === 'events') state.notifications.events = !state.notifications.events;
           renderApp();
           saveState();
         }
 
         if (action === 'applyBudget') {
-          state.budgetMax = String(Math.max(0, budgetSummary().daily)).replace('.', ',');
+          state.budgetMax = String(Math.max(0, budgetSummary().daily));
           state.tab = 'discover';
           renderApp();
           renderNav();
@@ -1125,9 +1165,7 @@
 
         if (action === 'budgetItem') {
           const item = state.budgetItems.find(x => x.id === id);
-          if (item) {
-            item.value = Number(trigger.value || 0);
-          }
+          if (item) item.value = Number(trigger.value || 0);
           saveState();
         }
 
@@ -1145,6 +1183,12 @@
         if (action === 'suggest') {
           showToast('Vorschlag gesendet');
         }
+
+        if (action === 'toggleTheme') {
+          state.dark = !state.dark;
+          saveState();
+          renderApp();
+        }
       });
 
       document.addEventListener('input', (event) => {
@@ -1158,7 +1202,7 @@
 
     renderNav();
     renderApp();
-    bindActions();
+    bindEvents();
   </script>
 </body>
 </html>
