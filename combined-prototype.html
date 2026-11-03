@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Compass Köln – Kombinierter Prototyp</title>
+  <style>
+    :root {
+      --bg: #f3f5fa;
+      --card: #ffffff;
+      --ink: #172033;
+      --muted: #5b6983;
+      --line: #dfe4ee;
+      --primary: #2e5bd7;
+      --primary-soft: #eaf0ff;
+      --success: #1a8a60;
+      --warning: #b87400;
+      --danger: #c85642;
+      --shadow: 0 10px 30px rgba(18, 29, 52, 0.08);
+      --land: #f6f1ea;
+      --water: #bfdaf7;
+      --park: #dfeaee;
+      --chip: #edf1f8;
+      --nav: rgba(255,255,255,0.9);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, "Segoe UI", sans-serif;
+      line-height: 1.4;
+    }
+
+    body {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-bottom: 82px;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(243,245,250,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 18px 12px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .badge {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 6px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .sub {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      background: var(--card);
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    main {
+      padding: 14px 18px 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+
+    .row::-webkit-scrollbar { display: none; }
+
+    .chip {
+      flex: none;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .chip.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 2px 10px rgba(16, 25, 39, 0.02);
+      margin-bottom: 12px;
+    }
+
+    .panel h2, .panel h3 {
+      margin: 0 0 8px;
+      font-size: 1.04rem;
+    }
+
+    label {
+      display: block;
+      margin: 8px 0 4px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    input, select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--ink);
+      padding: 9px 10px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(46,91,215,0.1);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .filter {
+      border: 1px solid var(--line);
+      background: transparent;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .filter.active {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .segmented {
+      display: flex;
+      margin: 8px 0 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .segmented button {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      padding: 9px 8px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .segmented button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .map-wrap {
+      margin-top: 8px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .map {
+      width: 100%;
+      display: block;
+      background: var(--land);
+    }
+
+    .pin { cursor: pointer; }
+    .pin circle { stroke: var(--card); stroke-width: 2.5; }
+    .pin text {
+      font-size: 11px;
+      text-anchor: middle;
+      dominant-baseline: central;
+      font-weight: 800;
+      fill: white;
+      pointer-events: none;
+    }
+    .pin.selected circle { stroke: var(--ink); stroke-width: 4; }
+
+    .place-count {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .place-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .place-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .place-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .place-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .place-meta {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .grade {
+      min-width: 52px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-radius: 10px;
+      text-align: center;
+      padding: 9px 8px 7px;
+      font-weight: 800;
+    }
+
+    .grade small {
+      display: block;
+      font-size: 0.58rem;
+      margin-top: 2px;
+      font-weight: 700;
+      opacity: 0.75;
+    }
+
+    .fav {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      background: transparent;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .fav.active {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      background: var(--chip);
+      color: var(--ink);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.69rem;
+      font-weight: 700;
+    }
+
+    .card-footer {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .price {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .crowd {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+      min-width: 110px;
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .btn.secondary {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: var(--primary-soft);
+    }
+
+    .meta-text {
+      color: var(--muted);
+      font-size: 0.76rem;
+      margin-top: 4px;
+    }
+
+    .event-card {
+      display: flex;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .event-time {
+      width: 54px;
+      font-weight: 900;
+      color: var(--primary);
+      font-size: 0.8rem;
+      padding-top: 2px;
+    }
+
+    .event-detail {
+      flex: 1;
+    }
+
+    .event-title {
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .event-location {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      text-align: center;
+    }
+
+    .stats div {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 8px;
+    }
+
+    .stats strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 3px;
+    }
+
+    .stats span {
+      color: var(--muted);
+      font-size: 0.66rem;
+    }
+
+    .list-block {
+      display: grid;
+      gap: 8px;
+    }
+
+    .list-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .list-row:first-child { border-top: 0; }
+
+    .list-row strong {
+      display: block;
+      font-size: 0.84rem;
+    }
+
+    .list-row span {
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    .toggle {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: #dfe4ee;
+      cursor: pointer;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      top: 4px;
+      left: 4px;
+      transition: left 0.15s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    .toggle.on {
+      background: var(--primary);
+    }
+
+    .toggle.on::after {
+      left: 22px;
+    }
+
+    nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      background: var(--nav);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--line);
+      display: flex;
+      padding: 6px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+      z-index: 30;
+    }
+
+    nav button {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.58rem;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 2px;
+      cursor: pointer;
+    }
+
+    nav button.active {
+      color: var(--primary);
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      display: block;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 88px;
+      background: rgba(23,32,51,0.94);
+      color: white;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+      z-index: 50;
+    }
+
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 360px) {
+      body { min-width: 320px; }
+      .button-row .btn { min-width: 100px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div>
+        <h1>Study Compass <span class="badge">Kombi</span></h1>
+        <p class="sub">Alles fürs Studi-Leben in Köln – mit Karte, Budget & Community.</p>
+      </div>
+      <div class="avatar" id="avatar">M</div>
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <nav id="nav"></nav>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = 'study-compass-combined-v1';
+
+    const categories = {
+      all: 'Alle',
+      essen: 'Essen',
+      cafe: 'WLAN-Cafés',
+      lernen: 'Lernen',
+      sport: 'Sport',
+      rabatt: 'Rabatt',
+      jobs: 'Jobs',
+      praktisch: 'Unterwegs'
+    };
+
+    const flags = {
+      vegan: 'Vegan',
+      gluten: 'Glutenfrei',
+      barrierefrei: 'Barrierefrei',
+      wlan: 'WLAN',
+      ruhig: 'Ruhig',
+      budget: 'Im Budget'
+    };
+
+    const places = [
+      { id: 1, c: 'essen', n: 'Mensa Zülpicher Straße', a: 'Uni-Viertel', p: 3.2, g: 2.1, v: 812, t: ['vegan', 'barrierefrei'], cr: 82, x: 78, y: 296, d: 'Warme Gerichte zu Studi-Preisen und viele vegetarische Optionen.', w: 'WLAN im Innenbereich' },
+      { id: 2, c: 'essen', n: 'Falafel-Eck Ehrenfeld', a: 'Ehrenfeld', p: 4.5, g: 1.7, v: 204, t: ['vegan', 'gluten'], cr: 30, x: 62, y: 110, d: 'Schnelle Portionen und gute Preise für zwischen zwei Vorlesungen.', w: 'Sehr günstig' },
+      { id: 3, c: 'essen', n: 'Foodtruck Rheinauhafen', a: 'Rheinauhafen', p: 7.5, g: 2.4, v: 96, t: ['gluten'], cr: 58, x: 228, y: 286, d: 'Wechselnde Küche direkt am Wasser – ideal für eine Pause nach der Uni.', w: 'Frei im Freien' },
+      { id: 4, c: 'cafe', n: 'Kaffeekollektiv', a: 'Belgisches Viertel', p: 2.9, g: 1.9, v: 151, t: ['vegan', 'wlan', 'barrierefrei'], cr: 40, x: 118, y: 168, d: 'Laptop-freundlich, gute Steckdosen und schönes Licht zum Lernen.', w: 'Schnelles WLAN' },
+      { id: 5, c: 'cafe', n: 'Café Südstern', a: 'Südstadt', p: 3.4, g: 2.6, v: 77, t: ['wlan', 'gluten'], cr: 22, x: 172, y: 338, d: 'Ruhig, angenehm und günstig – gut für Fokus-Arbeit.', w: 'Zugänglicher Raum' },
+      { id: 6, c: 'lernen', n: 'Uni- und Stadtbibliothek', a: 'Uni-Viertel', p: 0, g: 1.8, v: 530, t: ['wlan', 'barrierefrei'], cr: 90, x: 96, y: 332, d: 'Viele Arbeitsplätze, gute Ruhebereiche und mit Eduroam.', w: 'Tiefes Lernniveau' },
+      { id: 7, c: 'lernen', n: 'Lernlounge Rheinauhafen', a: 'Rheinauhafen', p: 0, g: 2.2, v: 61, t: ['barrierefrei'], cr: 28, x: 228, y: 272, d: 'Sitzplätze mit Blick auf den Rhein – gut für Gruppenarbeit.', w: 'Offenes WLAN' },
+      { id: 8, c: 'sport', n: 'Hochschulsport', a: 'Müngersdorf', p: 15, g: 1.9, v: 340, t: ['barrierefrei'], cr: 28, x: 38, y: 202, d: 'Viele Kurse und unterschiedliche Sportoptionen für zwischendurch.', w: 'Semesterticket inklusive' },
+      { id: 9, c: 'sport', n: 'Volksgarten-Court', a: 'Südstadt', p: 0, g: 2.5, v: 88, t: [], cr: 34, x: 150, y: 318, d: 'Kostenlose Plätze für Basketball und Tischtennis.', w: 'Am Abend bekannter' },
+      { id: 10, c: 'rabatt', n: 'Kino-Montag', a: 'Innenstadt', p: 5.5, g: 2.0, v: 129, t: ['barrierefrei'], cr: 42, x: 180, y: 196, d: 'Studi-Rabatt für den Filmabend nach der Vorlesung.', w: 'Vorteil mit Ausweis' },
+      { id: 11, c: 'rabatt', n: 'Semesterticket Bonus', a: 'Stadtweit', p: 0, g: 1.5, v: 402, t: [], cr: 18, x: 210, y: 240, d: 'Vieles im NRW-Nahverkehr ist mit dem Ticket günstiger.', w: 'Netter Bonus' },
+      { id: 12, c: 'jobs', n: 'Werkstudent Marketing', a: 'Köln-Deutz', p: 13.5, g: 2.3, v: 34, t: ['barrierefrei'], cr: 10, x: 305, y: 223, d: 'Flexible Studienjob-Option mit Remote-Anteil.', w: 'Gute Teamstruktur' },
+      { id: 13, c: 'jobs', n: 'Praktikum UX Research', a: 'Mediapark', p: 0, g: 2.0, v: 19, t: ['barrierefrei'], cr: 12, x: 150, y: 56, d: 'Vergütetes Praktikum mit guter Perspektive für Design-Studierende.', w: 'Remote möglich' },
+      { id: 14, c: 'praktisch', n: 'Gratis-Toilette Neumarkt', a: 'Innenstadt', p: 0, g: 3.4, v: 57, t: ['barrierefrei'], cr: 32, x: 192, y: 216, d: 'Zugänglich und gut gepflegt – praktisch im Stadtalltag.', w: 'Zentrale Lage' },
+      { id: 15, c: 'praktisch', n: 'Parkplatz Aachener Weiher', a: 'Uni-Viertel', p: 1.5, g: 3.0, v: 44, t: [], cr: 62, x: 108, y: 262, d: 'Vorteilhaft, wenn du mit dem Auto unterwegs bist.', w: 'Besser früh fahren' },
+      { id: 16, c: 'praktisch', n: 'Picknicktische Rheinwiesen', a: 'Rodenkirchen', p: 0, g: 1.9, v: 73, t: ['barrierefrei'], cr: 18, x: 235, y: 370, d: 'Kostenloser Platz zum Lernen oder Chillen im Freien.', w: 'Bester Blick' }
+    ];
+
+    const events = [
+      { id: 1, time: '17:00', title: 'Happy Hour', description: 'Cocktails ab 4 €', area: 'Belgisches Viertel', group: 'Happy Hour' },
+      { id: 2, time: '18:30', title: 'Hofflohmarkt Ehrenfeld', description: 'Over 30 alle mitmachen', area: 'Ehrenfeld', group: 'Hofflohmarkt' },
+      { id: 3, time: '19:00', title: 'Straßenfest Südstadt', description: 'Live-Musik und Essensstände', area: 'Südstadt', group: 'Straßenfest' },
+      { id: 4, time: '20:00', title: 'Open Mic', description: 'Kleiner Abend mit Musik', area: 'Zülpicher Viertel', group: 'Kleines Event' },
+      { id: 5, time: '21:30', title: 'Kölsch-Special', description: '0,3 l für 1,80 €', area: 'Altstadt', group: 'Hot Tipp' }
+    ];
+
+    const tabs = [
+      { key: 'discover', label: 'Entdecken', icon: 'map' },
+      { key: 'today', label: 'Heute', icon: 'today' },
+      { key: 'budget', label: 'Budget', icon: 'budget' },
+      { key: 'community', label: 'Community', icon: 'community' },
+      { key: 'profile', label: 'Profil', icon: 'profile' }
+    ];
+
+    const defaultState = {
+      tab: 'discover',
+      view: 'map',
+      cat: 'all',
+      filters: [],
+      budgetMax: '',
+      selectedPlace: 1,
+      eventFilter: 'all',
+      favorites: [],
+      user: 'Max',
+      dark: false,
+      notifications: { updates: true, events: true },
+      budgetItems: [
+        { id: 1, name: 'BAföG / Job', type: 'income', value: 900 },
+        { id: 2, name: 'Miete & Nebenkosten', type: 'expense', value: 380 },
+        { id: 3, name: 'Essen & Trinken', type: 'expense', value: 180 },
+        { id: 4, name: 'Freizeit', type: 'expense', value: 90 }
+      ],
+      savingsGoal: 150
+    };
+
+    const state = loadState();
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        return { ...defaultState, ...saved };
+      } catch (err) {
+        return { ...defaultState };
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 1700);
+    }
+
+    function money(v) {
+      return Number(v || 0).toFixed(2).replace('.', ',') + ' €';
+    }
+
+    function formatShort(v) {
+      return Number(v || 0).toFixed(1).replace('.', ',');
+    }
+
+    function crowdColor(v) {
+      if (v < 35) return ['Ruhig', '#1a8a60'];
+      if (v < 70) return ['Mittel', '#b87400'];
+      return ['Voll', '#c85642'];
+    }
+
+    function filterPlaces() {
+      const budgetLimit = state.budgetMax === '' ? Infinity : Number(String(state.budgetMax).replace(',', '.'));
+
+      return places.filter((p) => {
+        if (state.cat !== 'all' && p.c !== state.cat) return false;
+        if (p.p > budgetLimit && state.budgetMax !== '') return false;
+        if (state.filters.includes('ruhig') && p.cr >= 35) return false;
+        if (state.filters.includes('budget') && p.p > budgetLimit && budgetLimit !== Infinity) return false;
+
+        return state.filters.every((flag) => {
+          if (flag === 'vegan') return p.t.includes('vegan') || p.t.includes('veg');
+          if (flag === 'gluten') return p.t.includes('gluten');
+          if (flag === 'barrierefrei') return p.t.includes('barrierefrei');
+          if (flag === 'wlan') return p.t.includes('wlan');
+          if (flag === 'ruhig') return p.cr < 35;
+          if (flag === 'budget') return p.p <= budgetLimit || budgetLimit === Infinity;
+          return true;
+        });
+      });
+    }
+
+    function renderNav() {
+      const nav = document.getElementById('nav');
+      nav.innerHTML = tabs.map(tab => `
+        <button data-action="tab" data-key="${tab.key}" class="${state.tab === tab.key ? 'active' : ''}">
+          ${renderIcon(tab.icon)}
+          <span>${tab.label}</span>
+        </button>
+      `).join('');
+    }
+
+    function renderIcon(kind) {
+      const icons = {
+        map: '<svg class="icon" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"></path><path d="M9 3v15M15 6v15"></path></svg>',
+        today: '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg>',
+        budget: '<svg class="icon" viewBox="0 0 24 24"><path d="M3 7h15a3 3 0 0 1 0 6H5a3 3 0 0 0 0 6h16"></path><path d="M16 3v4M16 17v4"></path></svg>',
+        community: '<svg class="icon" viewBox="0 0 24 24"><path d="M16 19a4 4 0 0 0-8 0"></path><circle cx="12" cy="8" r="4"></circle><path d="M20 19a4 4 0 0 0-2.5-3.7"></path><path d="M4 19a4 4 0 0 1 2.5-3.7"></path></svg>',
+        profile: '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c1.5-3 4.4-5 8-5s6.5 2 8 5"></path></svg>'
+      };
+      return icons[kind] || icons.map;
+    }
+
+    function renderDiscover() {
+      const filtered = filterPlaces();
+      const selected = places.find(p => p.id === state.selectedPlace) || filtered[0] || places[0];
+
+      const categoryChips = ['all', ...Object.keys(categories).filter(k => k !== 'all')].map(key => `
+        <button class="chip ${state.cat === key ? 'active' : ''}" data-action="cat" data-key="${key}">${categories[key]}</button>
+      `).join('');
+
+      const filterButtons = Object.entries(flags).map(([key, label]) => `
+        <button class="filter ${state.filters.includes(key) ? 'active' : ''}" data-action="filter" data-key="${key}">${label}</button>
+      `).join('');
+
+      const map = buildMap(filtered, selected);
+      const list = filtered.length ? filtered.map(renderPlaceCard).join('') : '<div class="panel"><strong>Keine Treffer.</strong><div class="meta-text">Erhöhe dein Budget oder schalte einen Filter aus.</div></div>';
+
+      return `
+        <div class="row">${categoryChips}</div>
+        <div class="panel">
+          <h2>Filter & Budget</h2>
+          <label for="budgetInput">Budget pro Besuch (€)</label>
+          <input id="budgetInput" value="${state.budgetMax}" placeholder="z. B. 7,50" />
+          <div class="filters">${filterButtons}</div>
+        </div>
+        <div class="segmented">
+          <button data-action="view" data-key="map" class="${state.view === 'map' ? 'active' : ''}">Karte</button>
+          <button data-action="view" data-key="list" class="${state.view === 'list' ? 'active' : ''}">Liste</button>
+        </div>
+        ${state.view === 'map' ? `
+          <div class="map-wrap">
+            ${map}
+          </div>
+          <div class="place-count">${filtered.length} ${filtered.length === 1 ? 'Ort' : 'Orte'} gefunden</div>
+          ${selected && filtered.some(p => p.id === selected.id) ? renderPlaceCard(selected, true) : ''}
+        ` : list}
+      `;
+    }
+
+    function buildMap(filtered, selected) {
+      const base = `
+        <svg class="map" viewBox="0 0 360 400" aria-label="Karte von Köln">
+          <rect width="360" height="400" fill="var(--land)"/>
+          <path d="M255 -10 C 285 80, 300 140, 262 215 S 245 330, 262 410" stroke="var(--water)" stroke-width="28" fill="none" stroke-linecap="round"/>
+          <ellipse cx="112" cy="262" rx="34" ry="14" fill="var(--water)"/>
+          <ellipse cx="146" cy="132" rx="30" ry="20" fill="var(--park)"/>
+          <ellipse cx="318" cy="180" rx="28" ry="38" fill="var(--park)"/>
+          <g stroke="rgba(23,32,51,0.18)" stroke-width="7" fill="none" stroke-linecap="round">
+            <path d="M0 150 H235M0 240 H250M16 330 H250M80 0 V400M170 0 V400M120 0 Q130 200 60 400"/>
+          </g>
+          <g stroke="rgba(23,32,51,0.08)" stroke-width="1" fill="none">
+            <path d="M0 190 H240M0 290 H245M130 0 V400M30 0 V400"/>
+          </g>
+          <text x="230" y="170" font-size="20">⛪</text>
+          <text x="232" y="190" font-size="9" fill="#5b6983">Dom</text>
+          <text x="282" y="60" font-size="10" fill="#5b6983" transform="rotate(75 282 60)">Rhein</text>
+          <text x="28" y="378" font-size="9" fill="#5b6983">Uni</text>
+      `;
+
+      const markers = filtered.map((p) => {
+        const color = getCatColor(p.c);
+        const isSelected = selected && selected.id === p.id;
+        return `
+          <g class="pin ${isSelected ? 'selected' : ''}" data-action="place" data-id="${p.id}" tabindex="0">
+            <circle cx="${p.x}" cy="${p.y}" r="12" fill="${color}" />
+            <text x="${p.x}" y="${p.y + 1}" fill="white">${getCatLetter(p.c)}</text>
+          </g>
+        `;
+      }).join('');
+
+      return base + markers + '</svg>';
+    }
+
+    function getCatColor(cat) {
+      const map = {
+        essen: '#c85642',
+        cafe: '#2e5bd7',
+        lernen: '#5a4fc8',
+        sport: '#118a60',
+        rabatt: '#c98b2d',
+        jobs: '#0e7c93',
+        praktisch: '#58657a'
+      };
+      return map[cat] || '#2e5bd7';
+    }
+
+    function getCatLetter(cat) {
+      const map = {
+        essen: 'E',
+        cafe: 'C',
+        lernen: 'L',
+        sport: 'S',
+        rabatt: 'R',
+        jobs: 'J',
+        praktisch: 'P'
+      };
+      return map[cat] || 'P';
+    }
+
+    function renderPlaceCard(place, selected = false) {
+      const crowd = crowdColor(place.cr);
+      const favorite = state.favorites.includes(place.id);
+      return `
+        <article class="place-card" data-action="place" data-id="${place.id}">
+          <div class="place-top">
+            <div class="place-main">
+              <h3 class="place-name">${place.n}</h3>
+              <div class="place-meta">${place.a} · ${place.w || 'Gut erreichbar'}</div>
+            </div>
+            <div class="grade">${formatShort(place.g)}<small>Note</small></div>
+            <button class="fav ${favorite ? 'active' : ''}" data-action="favorite" data-id="${place.id}" aria-label="Favorit">♥</button>
+          </div>
+
+          <div class="tags">
+            ${place.t.map(tag => `<span class="tag">${flags[tag] || tag}</span>`).join('')}
+          </div>
+
+          <div class="card-footer">
+            <span class="price">${place.p === 0 ? 'Gratis' : `${money(place.p)}`}</span>
+            <span class="crowd"><span class="dot" style="background:${crowd[1]}"></span>${crowd[0]}</span>
+          </div>
+
+          <div class="button-row">
+            <button class="btn secondary" data-action="route" data-id="${place.id}">Route</button>
+            <button class="btn primary" data-action="review" data-id="${place.id}">Bewerten</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderToday() {
+      const eventGroups = ['all', ...new Set(events.map(e => e.group))];
+      const chosen = state.eventFilter || 'all';
+      const visible = chosen === 'all' ? events : events.filter(e => e.group === chosen);
+
+      return `
+        <div class="panel">
+          <h2>Was geht heute in Köln?</h2>
+          <div class="meta-text">${new Date().toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+        </div>
+        <div class="row">
+          ${eventGroups.map(group => `
+            <button class="chip ${chosen === group ? 'active' : ''}" data-action="eventFilter" data-key="${group}">${group === 'all' ? 'Alle' : group}</button>
+          `).join('')}
+        </div>
+        ${visible.map(e => `
+          <div class="event-card">
+            <div class="event-time">${e.time}</div>
+            <div class="event-detail">
+              <div class="event-title">${e.title}</div>
+              <div class="meta-text">${e.description}</div>
+              <div class="event-location">${e.area}</div>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function budgetSummary() {
+      const income = state.budgetItems.filter(item => item.type === 'income').reduce((sum, item) => sum + Number(item.value || 0), 0);
+      const expense = state.budgetItems.filter(item => item.type === 'expense').reduce((sum, item) => sum + Number(item.value || 0), 0);
+      const left = income - expense;
+      const daily = (left - Number(state.savingsGoal || 0)) / 30;
+      return { income, expense, left, daily };
+    }
+
+    function renderBudget() {
+      const summary = budgetSummary();
+      const row = item => `
+        <div class="list-row">
+          <div>
+            <strong>${item.name}</strong>
+            <span>${item.type === 'income' ? 'Einnahme' : 'Ausgabe'}</span>
+          </div>
+          <input data-action="budgetItem" data-id="${item.id}" value="${item.value}" style="max-width:110px;" />
+        </div>
+      `;
+
+      return `
+        <div class="panel">
+          <h2>Monatsbudget</h2>
+          <div class="meta-text">Verbleibend pro Tag nach Sparziel</div>
+          <div class="big" style="font-size:2rem;font-weight:900; margin-top:8px; color:${summary.daily >= 0 ? '#1a8a60' : '#c85642'};">${money(Math.max(0, summary.daily))}</div>
+          <div class="bar" style="height:8px;background:#edf1f8;border-radius:999px;overflow:hidden;margin-top:12px;">
+            <div style="height:100%;width:${Math.min(100, Math.max(0, (summary.left / Math.max(summary.income, 1)) * 100))}%;background:${summary.left >= 0 ? '#1a8a60' : '#c85642'};border-radius:999px;"></div>
+          </div>
+          <div class="button-row">
+            <button class="btn primary" data-action="applyBudget">Als Filter nutzen</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Übersicht</h3>
+          <div class="stats">
+            <div><strong>${money(summary.income)}</strong><span>Einnahmen</span></div>
+            <div><strong>${money(summary.expense)}</strong><span>Ausgaben</span></div>
+            <div><strong>${money(summary.left)}</strong><span>Übrig</span></div>
+            <div><strong>${money(summary.savingsGoal || 0)}</strong><span>Sparziel</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Einträge</h3>
+          <div class="list-block">${state.budgetItems.map(row).join('')}</div>
+        </div>
+      `;
+    }
+
+    function renderCommunity() {
+      return `
+        <div class="panel">
+          <h2>Community</h2>
+          <div class="stats">
+            <div><strong>24</strong><span>Noten</span></div>
+            <div><strong>18</strong><span>Checks</span></div>
+            <div><strong>7</strong><span>Kommentare</span></div>
+            <div><strong>12</strong><span>Tipps</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Rabatt-Updates</h3>
+          <div class="list-block">
+            <div class="list-row"><div><strong>Kino-Montag erweitert</strong><span>Mit Studi-Ausweis</span></div><button class="toggle on" data-action="toggle" data-key="updates"></button></div>
+            <div class="list-row"><div><strong>Event-Erinnerungen</strong><span>Heute im Viertel</span></div><button class="toggle on" data-action="toggle" data-key="events"></button></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Ort vorschlagen</h3>
+          <label>Name</label>
+          <input placeholder="z. B. Lerncafé Melaten" />
+          <label>Viertel</label>
+          <input placeholder="z. B. Nippes" />
+          <div class="button-row">
+            <button class="btn primary" data-action="suggest">Vorschlag senden</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderProfile() {
+      return `
+        <div class="panel">
+          <h2>Profil</h2>
+          <div class="place-top" style="align-items:center;">
+            <div class="avatar" style="width:44px;height:44px;">${state.user.charAt(0).toUpperCase()}</div>
+            <div class="place-main">
+              <div style="font-weight:800;">${state.user}</div>
+              <div class="meta-text">student@studium.de</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Favoriten</h3>
+          <div class="list-block">
+            ${state.favorites.length ? state.favorites.map(id => {
+              const place = places.find(p => p.id === id);
+              return `<div class="list-row"><div><strong>${place.n}</strong><span>${place.a}</span></div><button class="btn" data-action="removeFavorite" data-id="${id}">Entfernen</button></div>`;
+            }).join('') : '<div class="meta-text">Noch keine Favoriten gespeichert.</div>'}
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Einstellungen</h3>
+          <div class="list-row"><div><strong>Farbschema</strong><span>Hell / automatisch</span></div><button class="toggle ${state.dark ? 'on' : ''}" data-action="toggleTheme"></button></div>
+          <div class="list-row"><div><strong>Standardbudget</strong><span>Pro Besuch</span></div><input data-action="defaultBudget" value="${state.budgetMax || ''}" style="max-width:110px;" /></div>
+        </div>
+      `;
+    }
+
+    function renderApp() {
+      document.getElementById('app').innerHTML = {
+        discover: renderDiscover(),
+        today: renderToday(),
+        budget: renderBudget(),
+        community: renderCommunity(),
+        profile: renderProfile()
+      }[state.tab];
+
+      document.getElementById('avatar').textContent = state.user.charAt(0).toUpperCase();
+    }
+
+    function bindActions() {
+      document.addEventListener('click', (event) => {
+        const trigger = event.target.closest('[data-action]');
+        if (!trigger) return;
+
+        const action = trigger.dataset.action;
+        const key = trigger.dataset.key;
+        const id = Number(trigger.dataset.id || 0);
+
+        if (action === 'tab') {
+          state.tab = key;
+          renderApp();
+          renderNav();
+          saveState();
+        }
+
+        if (action === 'cat') {
+          state.cat = key;
+          renderApp();
+          saveState();
+        }
+
+        if (action === 'filter') {
+          const idx = state.filters.indexOf(key);
+          if (idx >= 0) state.filters.splice(idx, 1);
+          else state.filters.push(key);
+          renderApp();
+          saveState();
+        }
+
+        if (action === 'view') {
+          state.view = key;
+          renderApp();
+          saveState();
+        }
+
+        if (action === 'place') {
+          state.selectedPlace = Number(trigger.dataset.id || state.selectedPlace);
+          renderApp();
+          saveState();
+        }
+
+        if (action === 'favorite') {
+          const already = state.favorites.includes(id);
+          if (already) state.favorites = state.favorites.filter(v => v !== id);
+          else state.favorites.push(id);
+          renderApp();
+          saveState();
+          showToast(already ? 'Favorit entfernt' : 'Favorit gespeichert');
+        }
+
+        if (action === 'route') {
+          const place = places.find(p => p.id === id);
+          showToast(place ? `Route: ${place.n}` : 'Route geplant');
+        }
+
+        if (action === 'review') {
+          const place = places.find(p => p.id === id);
+          showToast(place ? `Bewertung für ${place.n}` : 'Bewertung');
+        }
+
+        if (action === 'eventFilter') {
+          state.eventFilter = key;
+          renderApp();
+          saveState();
+        }
+
+        if (action === 'toggle') {
+          const toggleKey = key || trigger.dataset.key;
+          if (toggleKey === 'updates') state.notifications.updates = !state.notifications.updates;
+          if (toggleKey === 'events') state.notifications.events = !state.notifications.events;
+          renderApp();
+          saveState();
+        }
+
+        if (action === 'applyBudget') {
+          state.budgetMax = String(Math.max(0, budgetSummary().daily)).replace('.', ',');
+          state.tab = 'discover';
+          renderApp();
+          renderNav();
+          saveState();
+          showToast('Budget als Filter übernommen');
+        }
+
+        if (action === 'budgetItem') {
+          const item = state.budgetItems.find(x => x.id === id);
+          if (item) {
+            item.value = Number(trigger.value || 0);
+          }
+          saveState();
+        }
+
+        if (action === 'defaultBudget') {
+          state.budgetMax = trigger.value;
+          saveState();
+        }
+
+        if (action === 'removeFavorite') {
+          state.favorites = state.favorites.filter(v => v !== id);
+          renderApp();
+          saveState();
+        }
+
+        if (action === 'suggest') {
+          showToast('Vorschlag gesendet');
+        }
+      });
+
+      document.addEventListener('input', (event) => {
+        if (event.target.id === 'budgetInput') {
+          state.budgetMax = event.target.value;
+          saveState();
+          renderApp();
+        }
+      });
+    }
+
+    renderNav();
+    renderApp();
+    bindActions();
+  </script>
+</body>
+</html>
