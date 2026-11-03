@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kölsch &amp; Kohle – Studi-App</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F5F9;--card:#fff;--ink:#0F1B33;--mute:#56627A;--line:#D5DBE6;--acc:#2557D6;--accink:#fff;--soft:#E4ECFB;--ok:#12906F;--mid:#B87400;--hot:#C93F27;--chip:#E6EAF2;--water:#BFD4F0;--land:#F6F7F9;--park:#D2E6D8;--road:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1322;--card:#151E33;--ink:#E8EEFA;--mute:#98A5C2;--line:#27324F;--acc:#7DA2F7;--accink:#0C1322;--soft:#1C2A4D;--chip:#212C48;--ok:#3CCBA5;--mid:#F2B33D;--hot:#FF7A5C;--water:#1F3A5E;--land:#172033;--park:#1F3A2D;--road:#26324A}}
+:root[data-theme="dark"]{--bg:#0C1322;--card:#151E33;--ink:#E8EEFA;--mute:#98A5C2;--line:#27324F;--acc:#7DA2F7;--accink:#0C1322;--soft:#1C2A4D;--chip:#212C48;--ok:#3CCBA5;--mid:#F2B33D;--hot:#FF7A5C;--water:#1F3A5E;--land:#172033;--park:#1F3A2D;--road:#26324A}
+*{box-sizing:inherit}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.4}
+body{max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px 6px}
+h1{font-size:24px;font-weight:800;margin:0;letter-spacing:-.02em}
+h2{font-size:17px;margin:0 0 6px}
+.sub{color:var(--mute);font-size:13px;margin:2px 0 0}
+.badge{font-size:11px;font-weight:600;background:var(--soft);color:var(--acc);padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle}
+button{font:inherit;color:inherit;cursor:pointer}
+.av{flex:none;width:36px;height:36px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-weight:800;display:grid;place-items:center;padding:0}
+.row{display:flex;gap:6px;overflow-x:auto;padding:8px 18px;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);padding:7px 12px;border-radius:6px;font-size:14px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--accink)}
+.panel{margin:6px 18px 10px;padding:14px;background:var(--card);border-radius:8px;border:1px solid var(--line)}
+.panel>b{display:block;margin-bottom:6px}
+label{font-size:14px;font-weight:600;display:block;margin:0 0 4px}
+input,select{font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+input:focus{border-color:var(--acc)}
+.flags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.flag{border:1px solid var(--line);background:transparent;border-radius:4px;padding:5px 10px;font-size:13px}
+.flag[aria-pressed="true"]{background:var(--soft);border-color:var(--acc);color:var(--acc);font-weight:600}
+.seg{display:flex;margin:4px 18px 8px;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--card)}
+.seg button{flex:1;border:0;background:none;padding:8px;font-weight:600;color:var(--mute)}
+.seg button[aria-pressed="true"]{background:var(--acc);color:var(--accink)}
+.panel .seg{margin:0 0 12px}
+.list{padding:0 18px;display:grid;gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px 14px}
+.hd{display:flex;gap:8px;align-items:flex-start}
+.top{flex:1;display:flex;justify-content:space-between;gap:10px;align-items:flex-start;background:none;border:0;text-align:left;padding:0}
+.name{font-weight:800;font-size:16px;line-height:1.2}
+.meta{color:var(--mute);font-size:13px;margin-top:3px}
+.grade{flex:none;text-align:center;min-width:46px;background:var(--soft);color:var(--acc);border-radius:6px;padding:5px 6px;font-weight:800;font-size:17px;line-height:1}
+.grade small{display:block;font-size:10px;font-weight:600;margin-top:2px}
+.fav{flex:none;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);background:none;border-radius:6px;color:var(--mute);padding:0}
+.fav[aria-pressed="true"]{color:var(--acc);border-color:var(--acc);background:var(--soft)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tag{font-size:12px;background:var(--chip);padding:2px 7px;border-radius:4px}
+.price{font-weight:800;color:var(--ink)}
+.crowd{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:2px}
+.more{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);display:none;font-size:14px}
+.card.open .more{display:block}
+.more p{margin:0 0 10px}
+.act{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+.act>span{font-size:13px;color:var(--mute);margin-right:2px}
+.act input,.act select{width:auto;flex:1;min-width:90px}
+.btn{border:1px solid var(--line);background:transparent;border-radius:6px;padding:7px 11px;font-size:13px;font-weight:600}
+.btn.p{background:var(--acc);color:var(--accink);border-color:var(--acc);text-decoration:none;display:inline-block}
+.cm{border-top:1px solid var(--line);padding:6px 0;font-size:13px}
+.empty{padding:24px 18px;color:var(--mute);text-align:center}
+.mapw{margin:0 18px}
+.map{width:100%;border-radius:8px;border:1px solid var(--line);background:var(--land);display:block}
+.pin{cursor:pointer}.pin circle{stroke:var(--card);stroke-width:2.5}
+.pin text{font-size:11px;font-weight:800;fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.pin.sel circle{stroke:var(--ink);stroke-width:3}
+.count{color:var(--mute);font-size:13px;margin:8px 0}
+.ev{display:flex;gap:12px}.ev .hd{flex:1}
+.time{flex:none;width:50px;font-weight:800}
+.irow{display:grid;grid-template-columns:1fr 78px 92px 28px;gap:6px;align-items:center;margin-bottom:6px;font-size:14px}
+.irow select{padding:8px 4px;font-size:13px}
+.x{border:0;background:none;font-size:20px;color:var(--mute);padding:0}
+.big{font-size:32px;font-weight:800;letter-spacing:-.02em}
+.bar{height:8px;border-radius:2px;background:var(--chip);overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.sum div{border-left:2px solid var(--line);padding-left:8px;font-size:12px;color:var(--mute)}.sum b{display:block;font-size:15px;color:var(--ink)}
+.add{display:grid;grid-template-columns:1fr 84px;gap:6px;margin-top:8px}
+.add select,.add button{grid-column:1/-1}
+.who{display:flex;gap:12px;align-items:center;margin-bottom:12px}.who .av{width:44px;height:44px;font-size:18px}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
+.srow select,.srow input{width:130px}
+.sw{width:40px;height:22px;border-radius:11px;border:0;background:var(--line);position:relative;padding:0;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.sw[aria-checked="true"]{background:var(--acc)}.sw[aria-checked="true"]::after{left:21px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
+.stats b{display:block;font-size:22px;font-weight:800}.stats span{font-size:11px;color:var(--mute)}
+.rm{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.st{font-size:11px;font-weight:600;border-radius:4px;padding:1px 6px;background:var(--chip);margin-left:6px}
+.st.ok{background:var(--soft);color:var(--acc)}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;background:var(--card);border-top:1px solid var(--line);display:flex;padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;border:0;background:none;padding:7px 2px 5px;font-size:11.5px;font-weight:600;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:3px;border-top:2px solid transparent}
+nav button[aria-selected="true"]{color:var(--acc);border-top-color:var(--acc)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:6px;font-size:13px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast,.sw::after{transition:none}}
+</style>
+</head>
+<body>
+<header><div><h1>Kölsch &amp; Kohle<span class="badge">Prototyp</span></h1><p class="sub">Alles fürs Studi-Leben in Köln. Demo-Daten, noch keine echten Angebote.</p></div><button class="av" id="av" data-a="tab" data-v="me" aria-label="Profil"></button></header>
+<main id="main"></main>
+<nav role="tablist" aria-label="Bereiche" id="nav"></nav>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const K="kk2",$=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const num=v=>{const n=parseFloat(String(v).replace(",","."));return isFinite(n)&&n>0?n:0},eur=n=>n.toFixed(2).replace(".",",")+" €",de=n=>n.toFixed(1).replace(".",",");
+const I={find:'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',today:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',budget:'<path d="M3 7h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7l12-3v3"/><circle cx="16.5" cy="13.5" r="1"/>',comm:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2.5.6 3.5 2.6 3.5 6"/>',me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/>',h:'<path d="M12 20s-7-4.5-9-9.2C1.5 7 4 4 7 4c2 0 3.5 1 5 3 1.5-2 3-3 5-3 3 0 5.5 3 4 6.8-2 4.7-9 9.2-9 9.2z"/>'};
+const ic=(k,s=22,f)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="${f?"currentColor":"none"}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[k]}</svg>`;
+const TABS=[["find","Entdecken"],["today","Heute"],["budget","Budget"],["comm","Community"],["me","Profil"]];
+const CATS=[["all","Alles"],["essen","Essen"],["cafe","WLAN-Cafés"],["lernen","Lernspots"],["sport","Sport"],["rabatt","Rabatte"],["jobs","Jobs"],["praktisch","Unterwegs"]];
+const CC={essen:["#C2563C","E"],cafe:["#2557D6","C"],lernen:["#5B4FC7","L"],sport:["#1F8A6B","S"],rabatt:["#B87400","R"],jobs:["#0F7C8F","J"],praktisch:["#56627A","U"]};
+const FLAGS=[["vegan","Vegan"],["veg","Vegetarisch"],["gluten","Glutenfrei"],["barrierefrei","Barrierefrei"]];
+const CROWD=[["ruhig","var(--ok)"],["mittel","var(--mid)"],["voll","var(--hot)"]];
+const P=[
+{id:1,c:"essen",n:"Mensa Zülpicher Straße",a:"Uni-Viertel",p:3.2,g:2.1,v:812,f:["veg","vegan","gluten","barrierefrei"],cr:2,x:72,y:296,d:"Hauptgericht ab 2,50 € mit Studierendenausweis. Um 12:30 Uhr am vollsten, ab 13:45 Uhr entspannt."},
+{id:2,c:"essen",n:"Falafel-Eck",a:"Zülpicher Platz",p:4.5,g:1.7,v:204,f:["veg","vegan"],cr:1,x:128,y:306,d:"Falafel-Teller für 4,50 €. Gegen 21 Uhr gibt es Restportionen zum halben Preis."},
+{id:3,c:"essen",n:"Nudelbude Ehrenfeld",a:"Ehrenfeld",p:6.9,g:2.4,v:96,f:["veg","gluten"],cr:0,x:60,y:110,d:"Große Portion Pasta, glutenfreie Nudeln auf Nachfrage. Studi-Dienstag: 1 € Rabatt."},
+{id:4,c:"cafe",n:"Kaffeekollektiv",a:"Belgisches Viertel",p:2.9,g:1.9,v:151,f:["vegan","barrierefrei"],cr:1,x:118,y:166,w:"Schnelles WLAN, viele Steckdosen",d:"Filterkaffee mit Nachschlag. Laptop-Plätze am Fenster, Hafermilch ohne Aufpreis."},
+{id:5,c:"cafe",n:"Café Südstern",a:"Südstadt",p:3.4,g:2.6,v:77,f:["veg","gluten"],cr:2,x:172,y:338,w:"WLAN, wenig Steckdosen",d:"Gemütlich, am Wochenende oft voll. Unter der Woche ab 14 Uhr gut zum Arbeiten."},
+{id:6,c:"lernen",n:"Uni- und Stadtbibliothek",a:"Uni-Viertel",p:0,g:1.8,v:530,f:["barrierefrei"],cr:2,x:96,y:334,w:"Eduroam, Gruppenräume buchbar",d:"Kostenlos. Ruhezonen im Obergeschoss. In der Klausurenphase ab 9 Uhr ausgebucht."},
+{id:7,c:"lernen",n:"Lernlounge Rheinauhafen",a:"Rheinauhafen",p:0,g:2.2,v:61,f:["barrierefrei"],cr:0,x:226,y:282,w:"Offenes WLAN",d:"Offene Sitzgruppen mit Blick auf den Rhein. Bei gutem Wetter auch draußen nutzbar."},
+{id:8,c:"sport",n:"Hochschulsport-Kurse",a:"Sportpark Müngersdorf",p:15,g:1.9,v:340,f:["barrierefrei"],cr:1,x:34,y:200,d:"Über 100 Kurse, Semesterbeitrag ab 15 €. Bouldern, Yoga und Volleyball sind schnell weg."},
+{id:9,c:"sport",n:"Volksgarten-Court",a:"Südstadt",p:0,g:2.5,v:88,f:[],cr:1,x:150,y:322,d:"Freie Basketball- und Tischtennisplätze. Abends oft Pick-up-Runden."},
+{id:10,c:"rabatt",n:"Kino-Montag",a:"Stadtweit",p:5.5,g:2.0,v:129,f:["barrierefrei"],cr:1,x:176,y:196,d:"Kinoticket für 5,50 € gegen Ausweis. Online reservieren spart Wartezeit."},
+{id:11,c:"rabatt",n:"Semesterticket-Bonus",a:"Stadtweit",p:0,g:1.5,v:402,f:[],cr:0,x:204,y:244,d:"Das Ticket gilt auch für Fahrten im ganzen NRW-Nahverkehr. Viele wissen es nicht."},
+{id:12,c:"jobs",n:"Werkstudent:in Marketing",a:"Köln-Deutz",p:13.5,g:2.3,v:34,f:["barrierefrei"],cr:0,x:308,y:222,d:"13,50 € pro Stunde, 12 Std. pro Woche, Remote-Anteil möglich. Start: Dezember."},
+{id:13,c:"jobs",n:"Praktikum UX Research",a:"Köln-Mediapark",p:0,g:2.0,v:19,f:["barrierefrei"],cr:0,x:150,y:56,d:"3 Monate, vergütet mit 1.100 € pro Monat. Bewerbung bis 15. November."},
+{id:14,c:"praktisch",n:"Gratis-Toilette Neumarkt",a:"Innenstadt",p:0,g:3.4,v:57,f:["barrierefrei"],cr:1,x:192,y:216,d:"Öffentlich, Euro-Schlüssel nötig. Sauberer am Vormittag."},
+{id:15,c:"praktisch",n:"Parkplatz Aachener Weiher",a:"Uni-Viertel",p:1.5,g:3.0,v:44,f:[],cr:2,x:108,y:262,d:"1,50 € pro Stunde. Besser vor 8:30 Uhr kommen. Fahrrad ist meist schneller."},
+{id:16,c:"praktisch",n:"Picknicktische Rheinwiesen",a:"Rodenkirchen",p:0,g:1.9,v:73,f:["barrierefrei"],cr:0,x:236,y:372,d:"Bänke und Tische, kostenlos. Grillen nur an markierten Stellen erlaubt."}];
+const EV=[
+{id:1,t:"17:00",n:"Happy Hour: Cocktails ab 4 €",a:"Belgisches Viertel",p:4,k:"Happy Hour"},
+{id:2,t:"18:30",n:"Hofflohmarkt Ehrenfeld",a:"Ehrenfeld",p:0,k:"Hofflohmarkt"},
+{id:3,t:"19:00",n:"Straßenfest Südstadt",a:"Südstadt",p:0,k:"Straßenfest"},
+{id:4,t:"20:00",n:"Open Mic im Keller",a:"Zülpicher Viertel",p:3,k:"Kleines Event"},
+{id:5,t:"21:30",n:"Kölsch-Special: 0,3 l für 1,80 €",a:"Altstadt",p:2,k:"Hot Tipp"}];
+const PI=["BAföG","Nebenjob","Eltern","Stipendium","Kindergeld","Wohngeld"],PE=["Miete","Nebenkosten","Lebensmittel","Semesterbeitrag","Handy","Versicherung","Streaming","Fahrrad & ÖPNV","Freizeit & Ausgehen","Kleidung"];
+const FRQ=[[1,"monatlich"],[3,"quartal"],[6,"halbjahr"],[12,"jährlich"]];
+const ROAD=[["Live-Auslastung per Standort","Meldungen automatisch an deinen Standort koppeln.",0],["Fotos zu Orten","Bilder von Lernplätzen und Gerichten teilen.",0],["Barrierefreiheits-Check","Jetzt in jeder Ortskarte: Zugang bestätigen.",1],["Rabatt-Updates","Neue Studi-Angebote als Hinweis erhalten.",1],["Neue Orte vorschlagen","Jetzt im Formular unten verfügbar.",1],["Karte mit Routen","Karte ist integriert, Route per Bus & Bahn.",1]];
+const RAB=["Kino-Montag: Studi-Ticket jetzt auch dienstags ab 20 Uhr (Demo)","Mensa Zülpicher: neues veganes Tagesgericht für 2,50 € (Demo)","Hochschulsport: Restplätze für Bouldern ab Montag buchbar (Demo)"];
+const KEYS=["user","fav","mine","rep","cm","acc","sug","votes","rab","evr","theme","defBud","defFl","items","goal"];
+let S={t:"find",v:"map",cat:"all",max:"",fl:[],sel:null,open:null,evf:"all",am:"in",del:0,user:null,fav:{p:[],e:[]},mine:{},rep:{},cm:{},acc:[],sug:[],votes:[],rab:true,evr:true,theme:"auto",defBud:"",defFl:[],goal:0,
+items:[{id:1,n:"Einnahmen (BAföG, Job, Eltern)",a:900,t:"i",f:1},{id:2,n:"Miete & Nebenkosten",a:380,t:"e",f:1},{id:3,n:"Essen & Trinken",a:180,t:"e",f:1},{id:4,n:"Freizeit",a:80,t:"e",f:1},{id:5,n:"Sonstiges",a:60,t:"e",f:1}]};
+try{Object.assign(S,JSON.parse(localStorage.getItem(K)||"{}"))}catch(_){}
+S.max=S.defBud;S.fl=[...S.defFl];
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(Object.fromEntries(KEYS.map(k=>[k,S[k]]))))}catch(_){}};
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),1800)}
+function theme(){const r=document.documentElement;S.theme=="auto"?r.removeAttribute("data-theme"):r.dataset.theme=S.theme}
+const crowd=p=>S.rep[p.id]??p.cr,lim=()=>S.max===""?Infinity:num(S.max);
+const list=()=>P.filter(p=>(S.cat=="all"||p.c==S.cat)&&(p.c=="jobs"||p.p<=lim())&&S.fl.every(f=>p.f.includes(f)));
+const heart=on=>ic("h",18,on);
+function card(p,fo){
+  const c=CROWD[crowd(p)],open=fo||S.open===p.id,g=S.mine[p.id]??p.g,fv=S.fav.p.includes(p.id),cm=S.cm[p.id]||[],ac=S.acc.includes(p.id);
+  const tags=[...p.f.map(x=>FLAGS.find(f=>f[0]==x)[1]),...(p.w?[p.w]:[]),...(ac?["Von dir bestätigt: barrierefrei"]:[])];
+  const price=p.c=="jobs"?(p.p?eur(p.p)+" / Std.":"Vergütet"):p.p===0?"Gratis":eur(p.p);
+  return `<article class="card ${open?"open":""}"><div class="hd"><button class="top" data-a="open" data-v="${p.id}" aria-expanded="${open}"><div><div class="name">${p.n}</div><div class="meta">${p.a} · <span class="price">${price}</span></div><div class="meta"><span class="crowd"><i class="dot" style="background:${c[1]}"></i>${c[0]}${S.rep[p.id]!=null?" (von dir)":""}</span></div></div><div class="grade">${de(g)}<small>Note · ${p.v}</small></div></button>
+  <button class="fav" data-a="favp" data-v="${p.id}" aria-pressed="${fv}" aria-label="${fv?"Aus Favoriten entfernen":"Zu Favoriten hinzufügen"}">${heart(fv)}</button></div>
+  <div class="tags">${tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+  <div class="more"><p>${p.d}</p>
+  <div class="act"><span>Wie voll ist es gerade?</span>${CROWD.map((x,i)=>`<button class="btn" data-a="rep" data-v="${p.id}:${i}">${x[0]}</button>`).join("")}</div>
+  <div class="act"><span>Deine Note</span><select id="r${p.id}" aria-label="Note">${[1,2,3,4,5].map(n=>`<option>${n}</option>`).join("")}</select><button class="btn" data-a="rate" data-v="${p.id}">Bewerten</button></div>
+  <div class="act"><input id="t${p.id}" placeholder="Was sollen andere Studis wissen?" aria-label="Kommentar"><button class="btn" data-a="cmt" data-v="${p.id}">Kommentieren</button></div>
+  <div class="act"><button class="btn" data-a="acc" data-v="${p.id}">${ac?"Bestätigung zurücknehmen":"Barrierefreiheit bestätigen"}</button>
+  <a class="btn p" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(p.n+" Köln")}&travelmode=transit">Route mit Bus &amp; Bahn</a></div>
+  ${cm.map(m=>`<div class="cm"><b>Du</b> · ${esc(m)}</div>`).join("")}</div></article>`}
+function mapSvg(L){
+  let h='<rect width="360" height="400" fill="var(--land)"/><path d="M255-10C285 80 300 140 262 215S245 330 262 410" stroke="var(--water)" stroke-width="30" fill="none" stroke-linecap="round"/><ellipse cx="110" cy="262" rx="30" ry="14" fill="var(--water)"/><ellipse cx="146" cy="132" rx="30" ry="20" fill="var(--park)"/><ellipse cx="318" cy="180" rx="28" ry="38" fill="var(--park)"/><g stroke="var(--road)" stroke-width="7" fill="none" stroke-linecap="round"><path d="M0 150H235M0 240H250M20 330H250M80 0V400M170 0V400M120 0Q130 200 60 400"/></g><g stroke="var(--line)" stroke-width="1" fill="none"><path d="M0 190H240M0 290H245M130 0V400M30 0V400"/></g><rect x="227" y="150" width="10" height="16" rx="1" fill="var(--mute)"/><text x="232" y="182" font-size="9" text-anchor="middle" fill="var(--mute)">Dom</text><text x="272" y="60" font-size="10" fill="var(--mute)" transform="rotate(75 272 60)">Rhein</text><text x="30" y="378" font-size="9" fill="var(--mute)">Uni</text>';
+  L.forEach(p=>{const c=CC[p.c];h+=`<g class="pin${S.sel==p.id?" sel":""}" role="button" tabindex="0" aria-label="${p.n}" data-a="pin" data-v="${p.id}"><circle cx="${p.x}" cy="${p.y}" r="${S.sel==p.id?15:13}" fill="${c[0]}"/><text x="${p.x}" y="${p.y}">${c[1]}</text></g>`});
+  return `<svg class="map" viewBox="0 0 360 400" role="group" aria-label="Karte von Köln mit Orten">${h}</svg>`}
+function find(){
+  const L=list(),sel=P.find(p=>p.id==S.sel);
+  return `<div class="row" role="group" aria-label="Kategorie">${CATS.map(c=>`<button class="chip" data-a="cat" data-v="${c[0]}" aria-pressed="${S.cat==c[0]}">${c[1]}</button>`).join("")}</div>
+  <div class="panel"><label for="bud">Budget pro Besuch (€)</label><input id="bud" data-i="max" inputmode="decimal" placeholder="Beliebiger Betrag, z. B. 7,50" value="${esc(S.max)}">
+  <div class="flags">${FLAGS.map(f=>`<button class="flag" data-a="fl" data-v="${f[0]}" aria-pressed="${S.fl.includes(f[0])}">${f[1]}</button>`).join("")}</div></div>
+  <div class="seg" role="group" aria-label="Ansicht"><button data-a="view" data-v="map" aria-pressed="${S.v=="map"}">Karte</button><button data-a="view" data-v="list" aria-pressed="${S.v=="list"}">Liste</button></div>
+  ${S.v=="map"?`<div class="mapw">${mapSvg(L)}<div class="count">${L.length} ${L.length==1?"Ort":"Orte"} gefunden${L.length?"":". Lockere einen Filter."}</div>${sel&&L.includes(sel)?card(sel,1):'<div class="meta">Tippe auf einen Pin für Details, Bewertungen und die aktuelle Auslastung.</div>'}</div>`
+  :`<div class="list">${L.length?L.map(p=>card(p)).join(""):'<div class="empty">Nichts gefunden. Erhöhe dein Budget oder schalte einen Filter aus.</div>'}</div>`}`}
+function today(){
+  const ks=["all",...new Set(EV.map(e=>e.k))],d=new Date().toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
+  return `<div class="panel"><b>Was geht heute in Köln?</b><div class="meta">${d}</div></div>
+  <div class="row" role="group" aria-label="Eventart">${ks.map(k=>`<button class="chip" data-a="evf" data-v="${k}" aria-pressed="${S.evf==k}">${k=="all"?"Alle":k}</button>`).join("")}</div>
+  <div class="list">${EV.filter(e=>S.evf=="all"||e.k==S.evf).map(e=>{const f=S.fav.e.includes(e.id);return `<article class="card ev"><div class="time">${e.t}</div><div class="hd"><div style="flex:1"><div class="name">${e.n}</div><div class="meta">${e.a} · ${e.p?eur(e.p):"Gratis"}</div><div class="tags"><span class="tag">${e.k}</span></div></div><button class="fav" data-a="fave" data-v="${e.id}" aria-pressed="${f}" aria-label="${f?"Aus Favoriten entfernen":"Zu Favoriten hinzufügen"}">${heart(f)}</button></div></article>`}).join("")}</div>`}
+function calc(){let i=0,o=0;S.items.forEach(x=>{const m=x.a/x.f;x.t=="i"?i+=m:o+=m});return{i,o,left:i-o,pd:(i-o-S.goal)/30}}
+function budget(){
+  const c=calc(),neg=c.pd<0,pct=Math.min(100,c.o/Math.max(c.i,1)*100);
+  const row=x=>`<div class="irow"><span>${esc(x.n)}</span><input id="a${x.id}" data-i="amt" data-v="${x.id}" inputmode="decimal" value="${x.a||""}" placeholder="0" aria-label="Betrag ${esc(x.n)}"><select data-c="frq" data-v="${x.id}" aria-label="Rhythmus">${FRQ.map(f=>`<option value="${f[0]}"${x.f==f[0]?" selected":""}>${f[1]}</option>`).join("")}</select><button class="x" data-a="rm" data-v="${x.id}" aria-label="${esc(x.n)} entfernen">×</button></div>`;
+  const pre=(L,t)=>L.filter(n=>!S.items.some(x=>x.n==n)).map(n=>`<button class="flag" data-a="pre" data-v="${t}:${n}">+ ${n}</button>`).join("");
+  const sec=(t,l)=>{const it=S.items.filter(x=>x.t==t);return `<div class="panel"><b>${l}</b>${it.map(row).join("")||'<div class="meta">Noch nichts eingetragen.</div>'}<div class="flags">${pre(t=="i"?PI:PE,t)}</div></div>`};
+  return `<div class="panel"><div class="meta">Frei pro Tag</div><div class="big" style="color:${neg?"var(--hot)":"var(--acc)"}">${eur(Math.max(0,c.pd))}</div>
+  <div class="bar" aria-hidden="true"><i style="width:${pct}%;background:${neg?"var(--hot)":"var(--acc)"}"></i></div>
+  <div class="sum"><div>Einnahmen<b>${eur(c.i)}</b></div><div>Ausgaben<b>${eur(c.o)}</b></div><div>Übrig im Monat<b style="color:${c.left<0?"var(--hot)":"var(--ok)"}">${eur(c.left)}</b></div></div>
+  <div class="meta" style="margin:10px 0">${c.left<0?"Du gibst mehr aus, als du hast.":"Rechnerisch auf 30 Tage verteilt, nach Abzug deines Sparziels."}</div>
+  <button class="btn p" data-a="go" style="margin-top:2px">Orte für ${eur(Math.max(0,c.pd))} finden</button></div>
+  ${sec("i","Einnahmen")}${sec("e","Ausgaben")}
+  <div class="panel"><b>Eigenen Posten hinzufügen</b><div class="add"><input id="cn" placeholder="Name, z. B. Nachhilfe" aria-label="Name"><input id="ca" inputmode="decimal" placeholder="Betrag" aria-label="Betrag"><select id="ct" aria-label="Art"><option value="e">Ausgabe</option><option value="i">Einnahme</option></select><button class="btn p" data-a="addi">Hinzufügen</button></div></div>
+  <div class="panel"><label for="goal">Sparziel pro Monat (€)</label><input id="goal" data-i="goal" inputmode="decimal" value="${S.goal||""}" placeholder="0"></div>`}
+function comm(){
+  const n=a=>Object.keys(a).length,cn=Object.values(S.cm).reduce((a,b)=>a+b.length,0);
+  return `<div class="panel"><b>Community</b><div class="meta" style="margin:0 0 10px">Studis bewerten Orte (1 = sehr gut), melden die Auslastung und teilen Tipps. Deine Beiträge:</div>
+  <div class="stats"><div><b>${n(S.mine)}</b><span>Noten</span></div><div><b>${n(S.rep)}</b><span>Meldungen</span></div><div><b>${cn}</b><span>Kommentare</span></div><div><b>${S.sug.length}</b><span>Vorschläge</span></div></div></div>
+  <div class="panel"><b>Rabatt-Updates</b>${RAB.map(r=>`<div class="rm"><span>${r}</span></div>`).join("")}<div class="srow"><span>Benachrichtigen</span><button class="sw" role="switch" aria-checked="${S.rab}" aria-label="Rabatt-Updates" data-a="tg" data-v="rab"></button></div></div>
+  <div class="panel"><b>Ort vorschlagen</b><div class="add"><input id="sn" placeholder="Name des Ortes" aria-label="Name des Ortes"><input id="sa" placeholder="Viertel" aria-label="Viertel"><select id="sc" aria-label="Kategorie">${CATS.slice(1).map(c=>`<option value="${c[1]}">${c[1]}</option>`).join("")}</select><button class="btn p" data-a="sug">Vorschlag senden</button></div>
+  ${S.sug.map(s=>`<div class="rm"><span>${esc(s.n)} <span class="meta">${esc(s.c)}${s.a?" · "+esc(s.a):""}</span></span><span class="st">In Prüfung</span></div>`).join("")}</div>
+  <div class="panel"><b>Funktionen</b>${ROAD.map((r,i)=>`<div class="rm"><div><b>${r[0]}</b><span class="st ${r[2]?"ok":""}">${r[2]?"Verfügbar":"Geplant"}</span><div class="meta">${r[1]}</div></div>${r[2]?"":`<button class="btn" data-a="vote" data-v="${i}" aria-pressed="${S.votes.includes(i)}">${S.votes.includes(i)?"Vorgemerkt":"Wünsche ich mir"}</button>`}</div>`).join("")}</div>`}
+function me(){
+  const u=S.user,sw=(k,l)=>`<div class="srow"><span>${l}</span><button class="sw" role="switch" aria-checked="${S[k]}" aria-label="${l}" data-a="tg" data-v="${k}"></button></div>`;
+  const acct=u?`<div class="panel"><div class="who"><span class="av">${esc(u.n[0].toUpperCase())}</span><div><b>${esc(u.n)}</b><div class="meta">${esc(u.e)}</div></div></div><button class="btn" data-a="out">Abmelden</button></div>`
+  :`<div class="panel"><div class="seg" role="group" aria-label="Konto"><button data-a="am" data-v="in" aria-pressed="${S.am=="in"}">Anmelden</button><button data-a="am" data-v="up" aria-pressed="${S.am=="up"}">Registrieren</button></div>
+  ${S.am=="up"?'<label for="an">Name</label><input id="an" autocomplete="name" style="margin-bottom:10px">':""}<label for="ae">E-Mail</label><input id="ae" type="email" autocomplete="email" style="margin-bottom:10px"><label for="ap">Passwort</label><input id="ap" type="password" autocomplete="${S.am=="up"?"new-password":"current-password"}" style="margin-bottom:12px">
+  <button class="btn p" data-a="auth">${S.am=="up"?"Konto erstellen":"Anmelden"}</button><div class="meta">Prototyp: Das Konto wird nur in diesem Browser gespeichert, das Passwort nicht. Favoriten funktionieren auch ohne Konto.</div></div>`;
+  const fp=S.fav.p.map(id=>P.find(p=>p.id==id)),fe=S.fav.e.map(id=>EV.find(e=>e.id==id));
+  const fr=(n,m,a,v)=>`<div class="rm"><div><b>${n}</b><div class="meta">${m}</div></div><div class="act" style="margin:0">${a?`<button class="btn" data-a="show" data-v="${v}">Ansehen</button>`:""}<button class="fav" data-a="${a?"favp":"fave"}" data-v="${v}" aria-pressed="true" aria-label="Aus Favoriten entfernen">${heart(1)}</button></div></div>`;
+  return `${acct}<div class="panel"><b>Favoriten</b>${fp.map(p=>fr(p.n,p.a,1,p.id)).join("")}${fe.map(e=>fr(e.n,e.t+" Uhr · "+e.a,0,e.id)).join("")}${fp.length+fe.length?"":'<div class="meta">Noch keine Favoriten. Tippe bei Orten und Events auf das Herz.</div>'}</div>
+  <div class="panel"><b>Einstellungen</b>
+  <div class="srow"><label for="th" style="margin:0">Darstellung</label><select id="th" data-c="theme"><option value="auto"${S.theme=="auto"?" selected":""}>System</option><option value="light"${S.theme=="light"?" selected":""}>Hell</option><option value="dark"${S.theme=="dark"?" selected":""}>Dunkel</option></select></div>
+  <div class="srow"><label for="db" style="margin:0">Standardbudget pro Besuch (€)</label><input id="db" data-i="defBud" inputmode="decimal" placeholder="egal" value="${esc(S.defBud)}"></div>
+  <div class="srow" style="display:block"><span>Standardfilter</span><div class="flags">${FLAGS.map(f=>`<button class="flag" data-a="dfl" data-v="${f[0]}" aria-pressed="${S.defFl.includes(f[0])}">${f[1]}</button>`).join("")}</div></div>
+  ${sw("evr","Event-Erinnerungen")}${sw("rab","Rabatt-Updates")}
+  <div class="srow"><span>Alle lokalen Daten</span><button class="btn" data-a="wipe">${S.del?"Wirklich löschen?":"Löschen"}</button></div></div>`}
+const V={find,today,budget,comm,me};
+function render(){
+  const a=document.activeElement,id=a&&a.id,pos=a&&a.selectionStart,y=scrollY;
+  $("#main").innerHTML=V[S.t]();
+  $("#nav").innerHTML=TABS.map(t=>`<button role="tab" data-a="tab" data-v="${t[0]}" aria-selected="${S.t==t[0]}">${ic(t[0])}${t[1]}</button>`).join("");
+  $("#av").innerHTML=S.user?esc(S.user.n[0].toUpperCase()):ic("me",20);
+  if(id){const e=document.getElementById(id);if(e){e.focus();try{e.setSelectionRange(pos,pos)}catch(_){}}}
+  scrollTo(0,y)}
+const tog=(a,v)=>{const i=a.indexOf(v);i<0?a.push(v):a.splice(i,1)},it=id=>S.items.find(x=>x.id==id);
+const A={
+tab(v){S.t=v;S.del=0;render();scrollTo(0,0)},cat(v){S.cat=v;S.sel=null;render()},fl(v){tog(S.fl,v);render()},view(v){S.v=v;render()},
+open(v){S.open=S.open==+v?null:+v;render()},pin(v){S.sel=+v;render()},evf(v){S.evf=v;render()},
+rep(v){const[i,c]=v.split(":");S.rep[i]=+c;save();toast("Danke für deine Meldung");render()},
+rate(v){S.mine[v]=+$("#r"+v).value;save();toast("Bewertung gespeichert");render()},
+cmt(v){const t=$("#t"+v).value.trim();if(!t)return toast("Bitte einen Kommentar eingeben");(S.cm[v]=S.cm[v]||[]).unshift(t);save();toast("Kommentar gespeichert");render()},
+acc(v){tog(S.acc,+v);save();render()},
+favp(v){tog(S.fav.p,+v);save();toast(S.fav.p.includes(+v)?"Zu Favoriten hinzugefügt":"Aus Favoriten entfernt");render()},
+fave(v){tog(S.fav.e,+v);save();toast(S.fav.e.includes(+v)?"Zu Favoriten hinzugefügt":"Aus Favoriten entfernt");render()},
+show(v){S.t="find";S.cat="all";S.fl=[];S.max="";S.sel=+v;S.open=+v;render();scrollTo(0,0)},
+go(){S.max=String(Math.max(0,Math.floor(calc().pd)));S.t="find";save();render();scrollTo(0,0)},
+pre(v){const[t,n]=v.split(":");S.items.push({id:Date.now(),n,a:0,t,f:/semester|versicherung|stipendium/i.test(n)?6:1});save();render()},
+rm(v){S.items=S.items.filter(x=>x.id!=v);save();render()},
+addi(){const n=$("#cn").value.trim();if(!n)return toast("Bitte einen Namen eingeben");S.items.push({id:Date.now(),n,a:num($("#ca").value),t:$("#ct").value,f:1});save();render()},
+tg(v){S[v]=!S[v];save();render()},vote(v){tog(S.votes,+v);save();render()},
+sug(){const n=$("#sn").value.trim();if(!n)return toast("Bitte einen Namen eingeben");S.sug.unshift({n,a:$("#sa").value.trim(),c:$("#sc").value});save();toast("Vorschlag gesendet");render()},
+am(v){S.am=v;render()},
+auth(){const e=$("#ae").value.trim(),p=$("#ap").value,n=S.am=="up"?$("#an").value.trim():e.split("@")[0];
+ if(!/^\S+@\S+\.\S+$/.test(e))return toast("Bitte eine gültige E-Mail eingeben");if(p.length<6)return toast("Das Passwort braucht mindestens 6 Zeichen");if(!n)return toast("Bitte einen Namen eingeben");
+ S.user={n,e};save();render();toast("Angemeldet")},
+out(){S.user=null;save();render();toast("Abgemeldet")},
+dfl(v){tog(S.defFl,v);save();render()},
+wipe(){if(!S.del){S.del=1;return render()}try{localStorage.removeItem(K)}catch(_){}location.reload()}};
+const IN={max(v){S.max=v;render()},defBud(v){S.defBud=v;save()},goal(v){S.goal=num(v);save();render()},amt(v,el){const x=it(el.dataset.v);if(x){x.a=num(v);save();render()}}};
+const CH={frq(v,el){const x=it(el.dataset.v);if(x){x.f=+v;save();render()}},theme(v){S.theme=v;save();theme()}};
+document.addEventListener("click",e=>{const el=e.target.closest("[data-a]");if(!el||/INPUT|SELECT/.test(el.tagName))return;A[el.dataset.a](el.dataset.v,el)});
+document.addEventListener("keydown",e=>{const el=e.target;if(el.dataset&&el.dataset.a=="pin"&&(e.key=="Enter"||e.key==" ")){e.preventDefault();A.pin(el.dataset.v)}});
+document.addEventListener("input",e=>{const el=e.target;if(el.dataset.i)IN[el.dataset.i](el.value,el)});
+document.addEventListener("change",e=>{const el=e.target;if(el.dataset.c)CH[el.dataset.c](el.value,el)});
+theme();render();
+</script>
+</body>
+</html>

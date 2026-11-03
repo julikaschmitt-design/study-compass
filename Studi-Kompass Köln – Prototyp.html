@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Studi-Kompass Köln – Prototyp</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF2F8;--card:#fff;--ink:#1D2A3C;--mute:#5E6B7F;--line:#D8E0EB;--pri:#3F6FB5;--priInk:#fff;--water:#BCD6F0;--land:#F7F5F0;--park:#CFE8D5;--road:#fff;--ok:#2E9E73;--mid:#C98A1B;--bad:#C4504F;--chip:#E3EAF4;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121A26;--card:#1C2636;--ink:#E8EEF7;--mute:#9AA8BC;--line:#2C394D;--pri:#7FA8E8;--priInk:#0F1722;--water:#26425F;--land:#1A2230;--park:#22382C;--road:#2A3548;--ok:#5CCB9C;--mid:#E3B04F;--bad:#EE8180;--chip:#27344A}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.4}
+#app{max-width:440px;height:100%;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);position:relative}
+header{padding:12px 16px 4px}
+h1{margin:0;font-size:21px;font-weight:800}
+header p{margin:2px 0 0;color:var(--mute);font-size:13px}
+main{flex:1;overflow-y:auto;position:relative}
+.view{display:none;padding:8px 16px 16px}.view.on{display:block}
+.row{display:flex;gap:8px;overflow-x:auto;padding:6px 0;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1.5px solid transparent;background:var(--chip);color:var(--ink);border-radius:999px;padding:7px 13px;font:inherit;font-weight:600;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--pri);color:var(--priInk)}
+.chip.sm{padding:5px 11px;font-size:13px;background:transparent;border-color:var(--line)}
+.chip.sm[aria-pressed=true]{background:var(--pri);border-color:var(--pri)}
+button:focus-visible,input:focus-visible,select:focus-visible,g[role=button]:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.map{width:100%;border-radius:18px;border:1px solid var(--line);background:var(--land);display:block;margin-top:4px}
+.pin{cursor:pointer}.pin circle{stroke:var(--card);stroke-width:2.5}
+.pin text{font-size:11px;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.pin.sel circle{stroke:var(--ink);stroke-width:3}
+.count{color:var(--mute);font-size:13px;margin:6px 2px}
+.sheet{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:8px}
+.sheet h2{margin:0 0 2px;font-size:18px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.tag{background:var(--chip);border-radius:8px;padding:2px 8px;font-size:12.5px;font-weight:600}
+.note{font-weight:800;font-size:22px;color:var(--pri)}
+.crowd{display:flex;align-items:center;gap:8px;margin:8px 0}
+.bar{flex:1;height:10px;border-radius:6px;background:var(--chip);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.btns{display:flex;gap:8px;margin:6px 0 10px}
+.btn{flex:1;border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:12px;padding:9px;font:inherit;font-weight:600;cursor:pointer}
+.btn.pri{background:var(--pri);color:var(--priInk);border-color:var(--pri)}
+.cm{border-top:1px solid var(--line);padding:8px 0;font-size:14px}
+.cm small{color:var(--mute)}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px;width:100%}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:8px 0}
+.ev b{display:block}.ev span{color:var(--mute);font-size:13.5px}
+label{display:block;font-weight:600;margin:12px 0 4px}
+.big{font-size:34px;font-weight:800;color:var(--pri);margin:4px 0}
+.hint{color:var(--mute);font-size:13px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:8px}
+nav{display:flex;border-top:1px solid var(--line);background:var(--card)}
+nav button{flex:1;border:0;background:none;color:var(--mute);padding:10px 4px 12px;font:inherit;font-weight:600;font-size:13px;cursor:pointer}
+nav button[aria-selected=true]{color:var(--pri)}
+nav span{display:block;font-size:20px}
+.demo{font-size:12px;color:var(--mute);text-align:center;padding:4px}
+</style>
+</head>
+<body>
+<div id="app">
+<header><h1>Studi-Kompass Köln</h1><p>Alles, was dein Studi-Alltag braucht – ohne Sucherei.</p></header>
+<main>
+<section class="view on" id="v-map">
+ <div class="row" id="cats" role="group" aria-label="Kategorie"></div>
+ <div class="row" id="flags" role="group" aria-label="Filter"></div>
+ <svg class="map" id="map" viewBox="0 0 360 400" role="img" aria-label="Karte von Köln mit Orten"></svg>
+ <div class="count" id="count"></div>
+ <div id="sheet"></div>
+</section>
+<section class="view" id="v-today">
+ <h2 style="margin:6px 0">Was geht heute in Köln?</h2>
+ <div class="row" id="evf" role="group" aria-label="Eventart"></div>
+ <div id="evs"></div>
+</section>
+<section class="view" id="v-budget">
+ <h2 style="margin:6px 0">Dein Budget</h2>
+ <div class="box">
+  <label for="inc">Einnahmen pro Monat (€)</label><input id="inc" type="number" inputmode="numeric" value="900">
+  <label for="rent">Miete (€)</label><input id="rent" type="number" inputmode="numeric" value="420">
+  <label for="fix">Handy, Semesterbeitrag, Sonstiges (€)</label><input id="fix" type="number" inputmode="numeric" value="150">
+  <div class="hint" style="margin-top:14px">Das bleibt dir pro Tag:</div>
+  <div class="big" id="day">–</div>
+  <div class="hint" id="foodhint"></div>
+  <div class="btns" style="margin-top:12px"><button class="btn pri" id="apply">Als Filter auf der Karte nutzen</button></div>
+ </div>
+</section>
+</main>
+<div class="demo">Prototyp mit Beispieldaten – Orte, Preise und Bewertungen sind erfunden.</div>
+<nav role="tablist">
+ <button role="tab" aria-selected="true" data-v="map"><span>🗺️</span>Karte</button>
+ <button role="tab" aria-selected="false" data-v="today"><span>🎉</span>Heute</button>
+ <button role="tab" aria-selected="false" data-v="budget"><span>💶</span>Budget</button>
+</nav>
+</div>
+<script>
+var CATS={cafe:["Cafés","☕","#3F6FB5"],essen:["Essen","🍽️","#C4504F"],lernen:["Lernen","📚","#6A5ACD"],sport:["Sport","🏃","#2E9E73"],rabatt:["Rabatt","🏷️","#C98A1B"],wc:["WC","🚻","#5E6B7F"],park:["Parken","🅿️","#3A7CA5"],bank:["Bänke","🪑","#7A8F3A"]};
+var FL={vegan:"Vegan",glutenfrei:"Glutenfrei",barrierefrei:"Barrierefrei",wlan:"WLAN",ruhig:"Gerade ruhig",budget:"Im Budget"};
+var P=[
+{id:1,n:"Mensa Zülpicher Straße",c:"essen",x:72,y:296,pr:1,t:["vegan","barrierefrei"],cr:85,note:2.1,k:140,i:"Warme Gerichte zu Studi-Preisen. Mittags sehr voll – ab 14 Uhr entspannter."},
+{id:2,n:"Falafelstand Ehrenfeld",c:"essen",x:60,y:110,pr:2,t:["vegan","glutenfrei"],cr:30,note:1.7,k:48,i:"Kleiner Stand, schnelle Portionen, auch glutenfreie Optionen."},
+{id:3,n:"Foodtruck Rheinauhafen",c:"essen",x:226,y:282,pr:2,t:["glutenfrei"],cr:55,note:2.4,k:22,i:"Wechselnde Gerichte direkt am Wasser."},
+{id:4,n:"Café Lernzeit",c:"cafe",x:122,y:226,pr:2,t:["wlan","vegan"],cr:40,note:1.9,k:64,i:"Steckdosen an fast jedem Tisch, schnelles WLAN, Laptop-freundlich."},
+{id:5,n:"Studi-Café Belgisches Viertel",c:"cafe",x:118,y:166,pr:2,t:["wlan","barrierefrei"],cr:75,note:2.6,k:37,i:"Gemütlich, aber nachmittags oft voll."},
+{id:6,n:"Café Südstadt",c:"cafe",x:172,y:338,pr:1,t:["wlan","glutenfrei"],cr:20,note:1.5,k:31,i:"Ruhig, günstiger Filterkaffee, Lernen erlaubt."},
+{id:7,n:"Uni- und Stadtbibliothek",c:"lernen",x:96,y:334,pr:1,t:["wlan","barrierefrei"],cr:90,note:1.8,k:210,i:"Viele Arbeitsplätze. In der Klausurphase früh kommen."},
+{id:8,n:"Lernraum Hörsaalgebäude",c:"lernen",x:48,y:262,pr:1,t:["wlan","barrierefrei"],cr:25,note:2.0,k:29,i:"Stille Zone, selten voll."},
+{id:9,n:"Uni-Sportanlage",c:"sport",x:34,y:200,pr:1,t:["barrierefrei"],cr:45,note:1.6,k:88,i:"Kurse und freie Plätze zum Auspowern zwischen zwei Lernblöcken."},
+{id:10,n:"Laufstrecke Rheinpark",c:"sport",x:306,y:172,pr:1,t:["barrierefrei"],cr:35,note:1.4,k:57,i:"Flache Runde mit Blick auf den Dom, kostenlos."},
+{id:11,n:"Kino: Studi-Dienstag",c:"rabatt",x:176,y:196,pr:1,t:["barrierefrei"],cr:50,note:2.2,k:19,i:"Ermäßigter Eintritt mit Studierendenausweis."},
+{id:12,n:"Öffentliche Toilette Neumarkt",c:"wc",x:192,y:214,pr:1,t:["barrierefrei"],cr:30,note:3.0,k:11,i:"Barrierefrei, Münzeinwurf nötig."},
+{id:13,n:"Parkhaus Uni",c:"park",x:40,y:330,pr:2,t:[],cr:60,note:2.8,k:15,i:"Meist freie Plätze am Vormittag."},
+{id:14,n:"Stadtgarten Bänke",c:"bank",x:146,y:128,pr:1,t:["barrierefrei"],cr:35,note:1.9,k:26,i:"Schattige Bänke und Tische zum Lesen im Freien."},
+{id:15,n:"Aachener Weiher",c:"bank",x:108,y:262,pr:1,t:[],cr:55,note:1.6,k:44,i:"Wiese und Bänke, ideal für eine Lernpause."}];
+var EV=[
+{a:"Happy Hour",t:"Heute, 17–19 Uhr",n:"Cocktails ab 4 €",w:"Belgisches Viertel"},
+{a:"Hofflohmarkt",t:"Heute, 11–16 Uhr",n:"Über 30 Höfe machen mit",w:"Ehrenfeld"},
+{a:"Straßenfest",t:"Heute, ab 15 Uhr",n:"Live-Musik und Essensstände",w:"Südstadt"},
+{a:"Hot Tipp",t:"Heute, 20 Uhr",n:"Open Mic, Eintritt frei",w:"Innenstadt"},
+{a:"Kleine Events",t:"Heute, 19 Uhr",n:"Lesung im Buchladen",w:"Nippes"}];
+var S={cat:"alle",fl:{},max:3,sel:null,ev:"alle",cm:{}};
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function de(n){return n.toFixed(1).replace(".",",")}
+function crowd(v){return v<35?["Ruhig","var(--ok)"]:v<70?["Mittel","var(--mid)"]:["Voll","var(--bad)"]}
+function list(){return P.filter(function(p){
+ if(S.cat!="alle"&&p.c!=S.cat)return false;
+ for(var k in S.fl){if(!S.fl[k])continue;
+  if(k=="ruhig"){if(p.cr>=35)return false}
+  else if(k=="budget"){if(p.pr>S.max)return false}
+  else if(p.t.indexOf(k)<0)return false}
+ return true})}
+function chips(el,items,cur,fn){el.innerHTML="";items.forEach(function(it){var b=document.createElement("button");b.className="chip"+(it.sm?" sm":"");b.textContent=it.l;b.setAttribute("aria-pressed",it.on?"true":"false");b.onclick=function(){fn(it.k)};el.appendChild(b)})}
+function mapBase(){return '<rect width="360" height="400" fill="var(--land)"/>'
++'<path d="M255-10C285 80 300 140 262 215S245 330 262 410" stroke="var(--water)" stroke-width="30" fill="none" stroke-linecap="round"/>'
++'<ellipse cx="110" cy="262" rx="30" ry="14" fill="var(--water)"/><ellipse cx="146" cy="132" rx="30" ry="20" fill="var(--park)"/><ellipse cx="318" cy="180" rx="28" ry="38" fill="var(--park)"/>'
++'<g stroke="var(--road)" stroke-width="7" fill="none" stroke-linecap="round"><path d="M0 150H235M0 240H250M20 330H250M80 0V400M170 0V400M120 0Q130 200 60 400"/></g>'
++'<g stroke="var(--line)" stroke-width="1" fill="none"><path d="M0 190H240M0 290H245M130 0V400M30 0V400"/></g>'
++'<text x="232" y="168" font-size="20" text-anchor="middle">⛪</text><text x="232" y="186" font-size="9" text-anchor="middle" fill="var(--mute)">Dom</text>'
++'<text x="272" y="60" font-size="10" fill="var(--mute)" transform="rotate(75 272 60)">Rhein</text>'
++'<text x="30" y="378" font-size="9" fill="var(--mute)">Uni</text>'}
+function drawMap(){var L=list(),s='<svg>';var h=mapBase();
+ L.forEach(function(p){var c=CATS[p.c];h+='<g class="pin'+(S.sel==p.id?" sel":"")+'" role="button" tabindex="0" aria-label="'+esc(p.n)+'" data-id="'+p.id+'"><circle cx="'+p.x+'" cy="'+p.y+'" r="'+(S.sel==p.id?15:13)+'" fill="'+c[2]+'"/><text x="'+p.x+'" y="'+p.y+'">'+c[1]+'</text></g>'});
+ $("map").innerHTML=h;
+ $("count").textContent=L.length+(L.length==1?" Ort":" Orte")+" gefunden"+(L.length==0?" – lockere einen Filter.":"");
+ $("map").querySelectorAll(".pin").forEach(function(g){var f=function(){S.sel=+g.dataset.id;render()};g.onclick=f;g.onkeydown=function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();f()}}})}
+function sheet(){var p=P.filter(function(q){return q.id==S.sel})[0],el=$("sheet");
+ if(!p){el.innerHTML='<div class="sheet hint">Tippe auf einen Pin für Details, Bewertungen und die aktuelle Auslastung.</div>';return}
+ var cr=crowd(p.cr),c=CATS[p.c],cms=S.cm[p.id]||[];
+ el.innerHTML='<div class="sheet"><h2>'+esc(p.n)+'</h2><span class="hint">'+c[1]+' '+c[0]+' · '+"€€€".slice(0,p.pr)+'</span>'
+ +'<div class="meta"><span class="note">Note '+de(p.note)+'</span><span class="hint" style="align-self:center">aus '+p.k+' Bewertungen</span></div>'
+ +'<p style="margin:0">'+esc(p.i)+'</p>'
+ +'<div class="meta">'+(p.t.length?p.t.map(function(t){return '<span class="tag">'+FL[t]+'</span>'}).join(""):'<span class="tag">Keine Angaben zur Inklusion</span>')+'</div>'
+ +'<div class="crowd"><b>Wie voll ist es?</b><div class="bar"><i style="width:'+p.cr+'%;background:'+cr[1]+'"></i></div><b style="color:'+cr[1]+'">'+cr[0]+'</b></div>'
+ +'<div class="btns"><button class="btn" data-cr="15">Leer</button><button class="btn" data-cr="50">Mittel</button><button class="btn" data-cr="90">Voll</button></div>'
+ +'<div class="btns"><button class="btn pri" id="route">Route hierher</button></div>'
+ +'<label for="rt">Deine Note</label><select id="rt"><option>1,0</option><option>1,7</option><option selected>2,0</option><option>2,7</option><option>3,0</option><option>4,0</option><option>5,0</option></select>'
+ +'<label for="tx">Kommentar</label><input id="tx" placeholder="Was sollen andere Studis wissen?"><div class="btns" style="margin-top:8px"><button class="btn pri" id="send">Bewertung abschicken</button></div>'
+ +cms.map(function(m){return '<div class="cm"><b>Du</b> · Note '+esc(m.r)+(m.t?'<br>'+esc(m.t):'')+'<br><small>gerade eben</small></div>'}).join("")
+ +'</div>';
+ el.querySelectorAll("[data-cr]").forEach(function(b){b.onclick=function(){p.cr=Math.round((p.cr+ +b.dataset.cr)/2);render()}});
+ $("route").onclick=function(){$("route").textContent="Bahn 9 · 14 Min. ab Neumarkt (Beispiel)"};
+ $("send").onclick=function(){var r=$("rt").value,v=parseFloat(r.replace(",","."));p.note=(p.note*p.k+v)/(p.k+1);p.k++;(S.cm[p.id]=S.cm[p.id]||[]).unshift({r:r,t:$("tx").value.trim()});render()}}
+function renderEv(){var ts=["alle"].concat(EV.map(function(e){return e.a}));
+ chips($("evf"),ts.map(function(t){return {k:t,l:t=="alle"?"Alle":t,on:S.ev==t}}),S.ev,function(k){S.ev=k;renderEv()});
+ $("evs").innerHTML=EV.filter(function(e){return S.ev=="alle"||e.a==S.ev}).map(function(e){return '<div class="ev"><b>'+esc(e.a)+': '+esc(e.n)+'</b><span>'+esc(e.t)+' · '+esc(e.w)+'</span></div>'}).join("")}
+function render(){
+ chips($("cats"),[{k:"alle",l:"Alle",on:S.cat=="alle"}].concat(Object.keys(CATS).map(function(k){return {k:k,l:CATS[k][1]+" "+CATS[k][0],on:S.cat==k}})),S.cat,function(k){S.cat=k;S.sel=null;render()});
+ chips($("flags"),Object.keys(FL).map(function(k){return {k:k,l:FL[k],sm:1,on:!!S.fl[k]}}),0,function(k){S.fl[k]=!S.fl[k];render()});
+ drawMap();sheet()}
+function calc(){var v=(+$("inc").value-$("rent").value-$("fix").value)/30;
+ $("day").textContent=(v>0?v.toFixed(2).replace(".",","):"0,00")+" € pro Tag";
+ var f=v*0.4;S.max=f<6?1:f<12?2:3;
+ $("foodhint").textContent="Davon ca. "+(f>0?f.toFixed(0):0)+" € zum Essen – passend: "+"€€€".slice(0,S.max)+" oder günstiger."}
+["inc","rent","fix"].forEach(function(i){$(i).oninput=calc});calc();
+$("apply").onclick=function(){S.fl.budget=true;S.cat="alle";show("map");render()};
+function show(v){document.querySelectorAll(".view").forEach(function(s){s.classList.toggle("on",s.id=="v-"+v)});document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.v==v)})}
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){show(b.dataset.v)}});
+render();renderEv();
+</script>
+</body>
+</html>
